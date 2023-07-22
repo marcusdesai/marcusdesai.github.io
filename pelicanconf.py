@@ -15,6 +15,8 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
+THEME = 'themes/test'
+
 # Blogroll
 # LINKS = (('Pelican', 'https://getpelican.com/'),
 #          ('Python.org', 'https://www.python.org/'),
@@ -28,4 +30,4 @@ AUTHOR_FEED_RSS = None
 DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+# RELATIVE_URLS = True

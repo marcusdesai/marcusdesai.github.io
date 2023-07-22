@@ -57,4 +57,7 @@ cython_debug/
 
 # JetBrains
 .idea/
+*.iml
 
+# Mac
+*.DS_STORE

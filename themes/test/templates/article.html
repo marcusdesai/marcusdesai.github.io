@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="HTML5">
+<head>
+    <title>{{ article.title }}</title>
+    <link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/main.css">
+</head>
+<body>
+    <nav>
+        <a href="{{ SITEURL }}/index.html">Home</a>
+        <a href="{{ SITEURL }}/about.html">About</a>
+    </nav>
+    <h1>{{ article.title }}</h1>
+    <p>By {{ article.author }}</p>
+    {{ article.content }}
+</body>
+</html>
