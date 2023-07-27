@@ -19,13 +19,16 @@ class Driver:
         self.driver.get(self.page)
 
     def refresh(self, url: str | None = None) -> None:
-        if url is None or self.page == url:
+        url = self.driver.current_url if url is None else url
+        if self.page == url:
             scroll_height = self.page_y_offset()
             self.driver.get(self.page)
+            self.driver.refresh()
             self.page_scroll_to(scroll_height)
         else:
             self.page = url
             self.driver.get(self.page)
+            self.driver.refresh()
 
     def page_y_offset(self) -> Any:  # noqa: ANN401
         return self.driver.execute_script("return window.pageYOffset")
