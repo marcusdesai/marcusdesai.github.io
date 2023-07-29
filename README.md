@@ -11,6 +11,6 @@ Notes for myself, and for you, whoever you are.
 **A**: Using `Pygments`, see [here][pygments] for docs and builtin styles.
 
 **Q**: How can I generate syntax highlighting styles?\
-**A**: `pygmentize -S <STYLE> -f html -a .highlight > themes/test/static/css/highlight.cs` in repo root.
+**A**: `pygmentize -S <STYLE> -f html -a .highlight > themes/simple/static/css/highlight.cs` in repo root.
 
 [pygments]: https://pygments.org

@@ -3,10 +3,11 @@
 BASEDIR="$(pwd)"
 INPUT_DIR="${BASEDIR}/content"
 OUTPUT_DIR="${BASEDIR}/output"
-CONF_FILE="${BASEDIR}/pelicanconf.py"
+LOCAL_CONF="${BASEDIR}/pelicanconf.py"
+PUBLISH_CONF="${BASEDIR}/publishconf.py"
 
-if [[ "$1" == *"html"* ]]; then
-  pelican "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${CONF_FILE}"
+if [[ "$1" == *"build"* ]]; then
+  pelican "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${PUBLISH_CONF}"
 fi
 
 if [[ "$1" == *"clean"* ]]; then
@@ -26,7 +27,7 @@ if [[ "$1" == *"serve"* ]]; then
 
   set -m  # Enable job control
 
-  pelican -lr "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${CONF_FILE}" &
+  pelican -lr "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${LOCAL_CONF}" &
   pelican_pid=$!
   python -m tooling.wysiwyg &
   python_pid=$!

@@ -1,0 +1,11 @@
+@import "highlight.css";
+@import "tachyons";
+
+h1 {
+    @extend .f1;
+    @extend .dark-pink;
+}
+
+h2 {
+    @extend .f2;
+}

@@ -119,6 +119,7 @@ line-length = 88
 extra-standard-library = [
     # third-party
     "pelican",
+    "pygments",
     "selenium",
     "watchdog",
     # first-party
