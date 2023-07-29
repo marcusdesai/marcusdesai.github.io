@@ -6,6 +6,7 @@ requires-python = ">=3.11"
 readme = "README.md"
 
 dependencies = [
+    "cssmin == 0.2.0",
     "libsass == 0.22.0",
     "pelican[Markdown] == 4.8.0",
     "pelican-webassets == 2.0.0",

@@ -1,3 +1,4 @@
+import re
 import time
 from collections.abc import Iterator
 from pathlib import Path
@@ -10,6 +11,9 @@ from watchdog.observers import Observer
 
 BASE_URL: Final[str] = "http://localhost:8000"
 LOCK: Final[Lock] = Lock()
+
+IS_DRAFT_RE: Final[re.Pattern[str]] = re.compile(r"Status: draft")
+TITLE_RE: Final[re.Pattern[str]] = re.compile(r"Title: (.*)")
 
 
 class Driver:
@@ -41,8 +45,12 @@ class Driver:
         if len(changed) != 0:
             modified_path = Path(changed[-1])
             if modified_path.suffix.endswith("md"):
-                url = f"{BASE_URL}/{modified_path.stem}.html"
-            if modified_path.name == "index.html":
+                content = open(modified_path).read()
+                url = f"{BASE_URL}/"
+                if IS_DRAFT_RE.search(content) is not None:
+                    url += "drafts/"
+                url += TITLE_RE.search(content).group(1).lower().replace(" ", "-")
+            elif modified_path.name == "index.html":
                 url = BASE_URL
         self.refresh(url)
 

@@ -8,6 +8,14 @@ TIMEZONE = "Europe/London"
 
 DEFAULT_LANG = "en"
 
+AUTHOR_SAVE_AS = ""
+CATEGORY_SAVE_AS = ""
+TAG_SAVE_AS = ""
+ARCHIVES_SAVE_AS = ""
+AUTHORS_SAVE_AS = ""
+CATEGORIES_SAVE_AS = ""
+TAGS_SAVE_AS = ""
+
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None

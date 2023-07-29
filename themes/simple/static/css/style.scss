@@ -9,3 +9,12 @@ h1 {
 h2 {
     @extend .f2;
 }
+
+blockquote {
+    @extend .bg-lightest-blue;
+}
+
+code {
+    @extend .code;
+    font-size: 0.875rem;
+}
