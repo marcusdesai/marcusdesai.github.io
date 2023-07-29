@@ -6,16 +6,20 @@ requires-python = ">=3.11"
 readme = "README.md"
 
 dependencies = [
-    "black == 23.7.0",
     "libsass == 0.22.0",
     "pelican[Markdown] == 4.8.0",
     "pelican-webassets == 2.0.0",
     "Pygments == 2.15.1",
+    "selenium == 4.10.0",
+    "watchdog == 3.0.0",
+]
+
+[optional-dependencies]
+dev = [
+    "black == 23.7.0",
     "pytest == 7.4.0",
     "pytest-cov == 4.1.0",
     "ruff == 0.0.280",
-    "selenium == 4.10.0",
-    "watchdog == 3.0.0",
 ]
 
 [build-system]
