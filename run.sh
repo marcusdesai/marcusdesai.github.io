@@ -8,6 +8,7 @@ PUBLISH_CONF="${BASEDIR}/publishconf.py"
 
 if [[ "$1" == *"build"* ]]; then
   pelican "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${PUBLISH_CONF}"
+  chmod -R 775 "${OUTPUT_DIR}"
 fi
 
 if [[ "$1" == *"clean"* ]]; then
