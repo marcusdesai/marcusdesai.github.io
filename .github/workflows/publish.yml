@@ -32,7 +32,9 @@ jobs:
           pip install .
 
       - name: Build site
-        run: ./run.sh build
+        run: |
+          ./run.sh build
+          chmod -R 775 output
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2

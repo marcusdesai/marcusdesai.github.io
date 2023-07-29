@@ -3,19 +3,18 @@
 BASEDIR="$(pwd)"
 INPUT_DIR="${BASEDIR}/content"
 OUTPUT_DIR="${BASEDIR}/output"
-LOCAL_CONF="${BASEDIR}/pelicanconf.py"
-PUBLISH_CONF="${BASEDIR}/publishconf.py"
-
-if [[ "$1" == *"build"* ]]; then
-  pelican "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${PUBLISH_CONF}"
-  chmod -R 775 "${OUTPUT_DIR}"
-fi
+LOCAL_CONF="${BASEDIR}/conf/local.py"
+PUBLISH_CONF="${BASEDIR}/conf/publish.py"
 
 if [[ "$1" == *"clean"* ]]; then
   [ ! -d "${OUTPUT_DIR}" ] || rm -rf "${OUTPUT_DIR}"
 fi
 
-propagate_signal() {
+if [[ "$1" == *"build"* ]]; then
+  pelican "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${PUBLISH_CONF}"
+fi
+
+function propagate_signal() {
     sig=$1
     kill -"$sig" -- -"$pelican_pid"
     kill -"$sig" -- -"$python_pid"

@@ -65,10 +65,6 @@ exclude = [
     "build",
     "dist",
     "venv",
-    # pelican files
-    "pelicanconf.py",
-    "publishconf.py",
-    "tasks.py",
 ]
 
 select = [
@@ -111,6 +107,9 @@ line-length = 88
 # setup.py does not need to be in a dir with an __init__.py file due to the way
 # this package is organised, so ignore the implicit namespace package error.
 "setup.py" = ["INP"]
+
+# conf dir does not need an __init__.py
+"conf/*" = ["INP001"]
 
 [tool.ruff.isort]
 # Use the "extra-standard-library" config to make EVERYTHING sort alphabetically
