@@ -14,6 +14,7 @@ LOCK: Final[Lock] = Lock()
 
 IS_DRAFT_RE: Final[re.Pattern[str]] = re.compile(r"Status: draft")
 TITLE_RE: Final[re.Pattern[str]] = re.compile(r"Title: (.*)")
+SLUG_RE: Final[re.Pattern[str]] = re.compile(r"Slug: (.*)")
 
 
 class Driver:
@@ -49,7 +50,11 @@ class Driver:
                 url = f"{BASE_URL}/"
                 if IS_DRAFT_RE.search(content) is not None:
                     url += "drafts/"
-                url += TITLE_RE.search(content).group(1).lower().replace(" ", "-")
+                if (slug_match := SLUG_RE.search(content)) is not None:
+                    url += slug_match.group(1)
+                else:
+                    title = TITLE_RE.search(content).group(1)
+                    url += title.lower().replace(" ", "-")
             elif modified_path.name == "index.html":
                 url = BASE_URL
         self.refresh(url)

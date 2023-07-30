@@ -9,11 +9,13 @@
 </head>
 <body class="ph3 ph4-ns system-sans-serif pb3 pb4-ns" style="font-size: 1.025rem">
     <nav class="flex justify-between w-100">
-        <h1 class="mt3 mt4-ns mb4 ttu b f1 f-subheadline-l"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
+        <h1 class="nav-title"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
     </nav>
     <div class="ml1 b--dashed flex-row pa3 dib mb3">Yo 👋<br><br>I'm Marcus<br><br>Welcome to my blog</div>
     {% for article in articles %}
-    <h2 class="ml1"><a class="f2 f2-m f-subheadline link black b" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">{{article.date.strftime('%Y-%m-%d')}} - {{ article.title }}</a></h2>
+    <h2 class="ml1">
+        <a class="f2 f2-m f-subheadline link black" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">{{article.date.strftime('%Y-%m-%d')}} - <span class="{{ article.metadata.colour }}">{{ article.title }}</span></a>
+    </h2>
     {% endfor %}
 </body>
 </html>

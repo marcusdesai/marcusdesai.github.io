@@ -3,7 +3,6 @@
 
 h1 {
     @extend .f1;
-    @extend .dark-pink;
 }
 
 h2 {
@@ -17,4 +16,21 @@ blockquote {
 code {
     @extend .code;
     font-size: 0.875rem;
+}
+
+.aw-l {
+    max-width: 38rem;
+}
+
+.nav-title {
+    @extend .mt3;
+    @extend .mt4-ns;
+    @extend .mb4;
+    @extend .ttu;
+    @extend .f-subheadline;
+}
+
+// Post Category Colours
+.philosophy-colour {
+    @extend .dark-pink;
 }
