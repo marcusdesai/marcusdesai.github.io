@@ -3,10 +3,10 @@ SITENAME = "MRCSD Blog"
 SITEURL = "http://localhost:8000"
 
 PATH = "content"
+ARTICLE_SAVE_AS = "{date:%Y}/{date:%b}/{slug}.html"
+ARTICLE_URL = "{date:%Y}/{date:%b}/{slug}"
 
 TIMEZONE = "Europe/London"
-
-DEFAULT_LANG = "en"
 
 AUTHOR_SAVE_AS = ""
 CATEGORY_SAVE_AS = ""
@@ -25,6 +25,10 @@ AUTHOR_FEED_RSS = None
 
 THEME = "themes/simple"
 
+DEFAULT_METADATA = {
+    'status': 'draft',
+}
+DEFAULT_LANG = "en"
 DEFAULT_PAGINATION = False
 
 MARKDOWN = {

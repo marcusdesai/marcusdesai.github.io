@@ -9,11 +9,11 @@
 </head>
 <body class="default-body">
     <nav class="flex justify-between w-100">
-        <h1 class="nav-title"><a class="black link" href="{{SITEURL}}">{{ SITENAME }}</a></h1>
+        <h1 class="nav-title"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
     </nav>
     <article class="mt3 mt4-ns lh-copy flex flex-column">
         <div class="aw-l mb5 self-center" style="font-size: 1.125rem;" aria-labelledby="title">
-            <h1 class="mb0 tl {{ article.metadata.colour }}">{{ article.title }}</h1>
+            <h1 class="mb0 tl {{ article.category }}-colour">{{ article.title }}</h1>
             <h2 class="mt0 mb5">{{ article.date.strftime('%Y-%m-%d') }}</h2>
             {{ article.content }}
         </div>

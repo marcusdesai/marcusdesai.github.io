@@ -69,8 +69,12 @@ code {
     @extend .black;
 }
 
-// Post Category Colours
+// Post Categories
 
 .philosophy-colour {
     @extend .dark-pink;
+}
+
+.opinion-colour {
+    @extend .dark-green;
 }

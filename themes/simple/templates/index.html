@@ -14,7 +14,7 @@
     <div class="ml1 b--dashed flex-row pa3 dib mb3">Yo 👋<br><br>I'm Marcus<br><br>Welcome to my blog</div>
     {% for article in articles %}
     <h2 class="ml1">
-        <a class="f2 f2-m f-subheadline link black" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">{{article.date.strftime('%Y-%m-%d')}} - <span class="{{ article.metadata.colour }}">{{ article.title }}</span></a>
+        <a class="f2 f2-m f-subheadline link black" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">{{article.date.strftime('%Y-%m-%d')}} - <span class="{{ article.category }}-colour">{{ article.title }}</span></a>
     </h2>
     {% endfor %}
 </body>

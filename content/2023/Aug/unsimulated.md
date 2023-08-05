@@ -1,7 +1,7 @@
 Title: Freedom is in Being Who You Are
-Date: 2023-07-30
+Date: 2023-08-04
 Slug: freedom-in-being
-Colour: philosophy-colour
+Category: philosophy
 Status: draft
 
 I've been toying with a conceptualisation of free will for a while, it's not fully formed but I want to write about it and try to sketch it out and make it more concrete.
@@ -84,7 +84,7 @@ There's the fundamental issue to making claims about actions being otherwise or 
 
 ### Compatible or Incompatible?
 
-Following immediately on from this response to determinism, it is a convenient to briefly discuss where this whole position falls in the compatible vs. incompatible distinction. The compatability in question is whether free will is compatible with determinism (let's agree determinism is real for now).[^4] Incompatibilists argue that free will is not compatible with determinism.
+Following immediately on from this response to determinism, it's convenient to briefly discuss where this position falls in the compatible vs. incompatible distinction. The compatability in question is whether free will is compatible with determinism (let's agree determinism is real for now).[^4] Incompatibilists argue that free will is not compatible with determinism.
 
 [^4]: Again SEP on [compatibilism](https://plato.stanford.edu/entries/compatibilism/).
 
@@ -92,7 +92,7 @@ I've not thought too much about this, but I would be immediately tempted to sugg
 
 ## Conclusion
 
-Alright, well that's all I've got at the moment. I think there's something here but this post became somewhat bogged down by technicalities. I feel that we did not reach deeper insights about the nature of uniqueness, but that's good to know since it clarifies my desire for this. Positively, uniqueness seems to be useful in making space for individuals to claim free will, if they so desire.
+Alright, well that's all I've got at the moment. I think there's something here but this post became somewhat bogged down by technicalities. I feel that we did not reach deeper insights about the nature of uniqueness well enough, but that's good to know since it clarifies my desire for this. Positively, uniqueness seems to be useful in making space for individuals to claim free will, if they so desire.
 
 If this position does not already have a name then maybe we can make one up. How about Being Uniquely Free? We're all BUF? ...no?
 

@@ -1,6 +1,7 @@
 import re
 import time
 from collections.abc import Iterator
+from datetime import date
 from pathlib import Path
 from queue import Queue
 from selenium import webdriver
@@ -9,22 +10,34 @@ from typing import Any, Final
 from watchdog.events import FileModifiedEvent, FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-BASE_URL: Final[str] = "http://localhost:8000"
+BASE_URL: Final[Path] = Path("http://localhost:8000")
 LOCK: Final[Lock] = Lock()
 
-IS_DRAFT_RE: Final[re.Pattern[str]] = re.compile(r"Status: draft")
 TITLE_RE: Final[re.Pattern[str]] = re.compile(r"Title: (.*)")
+DATE_RE: Final[re.Pattern[str]] = re.compile(r"Date: (.*)")
 SLUG_RE: Final[re.Pattern[str]] = re.compile(r"Slug: (.*)")
+STATUS_RE: Final[re.Pattern[str]] = re.compile(r"Status: (.*)")
+
+
+def is_draft(content: str) -> bool:
+    if (status_match := STATUS_RE.search(content)) is not None:
+        return status_match.group(1) != "published"
+    return True
+
+
+def get_date(content: str) -> date:
+    post_date = DATE_RE.search(content).group(1)
+    return date.fromisoformat(post_date)
 
 
 class Driver:
     def __init__(self) -> None:
         self.driver = webdriver.Firefox()
-        self.page = BASE_URL
+        self.page = str(BASE_URL)
         self.driver.get(self.page)
 
-    def refresh(self, url: str | None = None) -> None:
-        url = self.driver.current_url if url is None else url
+    def refresh(self, url: Path | None = None) -> None:
+        url = self.driver.current_url if url is None else str(url)
         if self.page == url:
             scroll_height = self.page_y_offset()
             self.driver.get(self.page)
@@ -47,14 +60,21 @@ class Driver:
             modified_path = Path(changed[-1])
             if modified_path.suffix.endswith("md"):
                 content = open(modified_path).read()
-                url = f"{BASE_URL}/"
-                if IS_DRAFT_RE.search(content) is not None:
-                    url += "drafts/"
-                if (slug_match := SLUG_RE.search(content)) is not None:
-                    url += slug_match.group(1)
+                url = BASE_URL
+                if is_draft(content):
+                    url = url.joinpath("drafts/")
                 else:
-                    title = TITLE_RE.search(content).group(1)
-                    url += title.lower().replace(" ", "-")
+                    post_date = get_date(content)
+                    year = post_date.strftime("%Y")
+                    month = post_date.strftime("%b")
+                    url = url.joinpath(year).joinpath(month)
+                if (slug_match := SLUG_RE.search(content)) is not None:
+                    url = url.joinpath(slug_match.group(1))
+                else:
+                    if (title_match := TITLE_RE.search(content)) is None:
+                        print(f"no title set for: {modified_path}")
+                        return None
+                    url = url.joinpath(title_match.group(1).lower().replace(" ", "-"))
             elif modified_path.name == "index.html":
                 url = BASE_URL
         self.refresh(url)
