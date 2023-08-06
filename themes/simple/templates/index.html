@@ -8,14 +8,27 @@
     {% endassets %}
 </head>
 <body class="default-body">
-    <nav class="flex justify-between w-100">
-        <h1 class="nav-title"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
-    </nav>
-    <div class="ml1 b--dashed flex-row pa3 dib mb3">Yo 👋<br><br>I'm Marcus<br><br>Welcome to my blog</div>
-    {% for article in articles %}
-    <h2 class="ml1">
-        <a class="f2 f2-m f-subheadline link black" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">{{article.date.strftime('%Y-%m-%d')}} - <span class="{{ article.category }}-colour">{{ article.title }}</span></a>
-    </h2>
-    {% endfor %}
+    <section itemscope itemtype="https://schema.org/Blog">
+        <nav class="flex justify-between w-100">
+            <h1 class="nav-title" itemprop="headline">
+                <a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a>
+            </h1>
+        </nav>
+
+        <div class="ml1 b--dashed flex-row pa3 dib mb3">
+            Yo 👋<br><br>I'm Marcus<br><br>Welcome to my blog
+        </div>
+
+        {% for article in articles %}
+        <article itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+            <h2 class="ml1">
+                <time itemprop="datePublished" datetime="{{article.date.strftime('%Y-%m-%d')}}">{{article.date.strftime('%Y-%m-%d')}} - </time>
+                <a class="f2 f2-m f-subheadline link black {{ article.category }}-colour" href="{{ SITEURL }}/{{ article.url.replace('.html', '') }}">
+                    <span itemprop="headline">{{ article.title }}</span>
+                </a>
+            </h2>
+        </article>
+        {% endfor %}
+    </section>
 </body>
 </html>

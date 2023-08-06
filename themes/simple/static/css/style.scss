@@ -28,7 +28,17 @@ code {
 
 // Custom classes
 
-.aw-l {
+.article-p {
+    @extend .mt3;
+    @extend .mt4-ns;
+    @extend .mb5;
+    @extend .lh-copy;
+    @extend .flex;
+    @extend .flex-column;
+    font-size: 1.125rem;
+}
+
+.article-width {
     max-width: 38rem;
 }
 
