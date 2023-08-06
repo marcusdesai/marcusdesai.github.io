@@ -11,14 +11,16 @@
     <nav class="flex justify-between w-100">
         <h1 class="nav-title"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
     </nav>
-    <article class="article-p" itemscope itemtype="https://schema.org/BlogPosting">
-        <div class="article-width self-center" aria-labelledby="title">
-            <h1 class="mb0 tl {{ article.category }}-colour" itemprop="headline">{{ article.title }}</h1>
-            <h2 class="mt0 mb5">
-                <time itemprop="datePublished" datetime="{{ article.date.strftime('%Y-%m-%d') }}">{{ article.date.strftime('%Y-%m-%d') }}</time>
-            </h2>
-            <div itemprop="articleBody">{{ article.content }}</div>
-        </div>
-    </article>
+    <main>
+        <article class="article-p" itemscope itemtype="https://schema.org/BlogPosting">
+            <div class="article-width self-center">
+                <h1 class="mb0 tl {{ article.category }}-colour" itemprop="headline">{{ article.title }}</h1>
+                <h2 class="mt0 mb5">
+                    <time itemprop="datePublished" datetime="{{ article.date.strftime('%Y-%m-%d') }}">{{ article.date.strftime('%Y-%m-%d') }}</time>
+                </h2>
+                <div itemprop="articleBody">{{ article.content }}</div>
+            </div>
+        </article>
+    </main>
 </body>
 </html>
