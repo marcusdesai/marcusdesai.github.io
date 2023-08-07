@@ -1,35 +1,23 @@
-AUTHOR = "Marcus Desai"
-SITENAME = "MRCSD Blog"
-SITEURL = "http://localhost:8000"
-
-PATH = "content"
+ARCHIVES_SAVE_AS = ""
 ARTICLE_SAVE_AS = "{date:%Y}/{date:%b}/{slug}.html"
 ARTICLE_URL = "{date:%Y}/{date:%b}/{slug}"
-
-TIMEZONE = "Europe/London"
-
-AUTHOR_SAVE_AS = ""
-CATEGORY_SAVE_AS = ""
-TAG_SAVE_AS = ""
-ARCHIVES_SAVE_AS = ""
-AUTHORS_SAVE_AS = ""
-CATEGORIES_SAVE_AS = ""
-TAGS_SAVE_AS = ""
-
-# Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
-CATEGORY_FEED_ATOM = None
-TRANSLATION_FEED_ATOM = None
+AUTHOR = "Marcus Desai"
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+AUTHOR_SAVE_AS = ""
+AUTHORS_SAVE_AS = ""
 
-THEME = "themes/simple"
+CATEGORY_FEED_ATOM = None
+CATEGORY_SAVE_AS = ""
+CATEGORIES_SAVE_AS = ""
 
 DEFAULT_METADATA = {
     'status': 'draft',
 }
 DEFAULT_LANG = "en"
 DEFAULT_PAGINATION = False
+
+FEED_ALL_ATOM = None
 
 MARKDOWN = {
     "extension_configs": {
@@ -39,3 +27,31 @@ MARKDOWN = {
     },
     "output_format": "html5",
 }
+
+PATH = "content"
+
+SITEMAP = {
+    "format": "xml",
+    "priorities": {
+        "articles": 0.5,
+        "indexes": 0.5,
+        "pages": 0.5,
+    },
+    "changefreqs": {
+        "articles": "monthly",
+        "indexes": "daily",
+        "pages": "monthly",
+    }
+}
+SITENAME = "MRCSD Blog"
+SITEURL = "http://localhost:8000"
+STATIC_PATHS = []
+
+TAG_SAVE_AS = ""
+TAGS_SAVE_AS = ""
+TEMPLATE_PAGES = {
+    "robots.txt": "robots.txt",
+}
+THEME = "themes/simple"
+TIMEZONE = "Europe/London"
+TRANSLATION_FEED_ATOM = None
