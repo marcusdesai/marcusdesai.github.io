@@ -1,8 +1,8 @@
 Title: Freedom is in Being Who You Are
-Date: 2023-08-04
+Date: 2023-08-07
 Slug: freedom-in-being
 Category: philosophy
-Status: draft
+Status: published
 
 I've been toying with a conceptualisation of free will for a while, it's not fully formed but I want to write about it and try to sketch it out and make it more concrete.
 
@@ -82,18 +82,24 @@ I think to meet the bombast of this post's title we're obliged to give a respons
 
 There's the fundamental issue to making claims about actions being otherwise or not, the claims are not operative. This is not entirely satisfying, it seems to pass over the question of the proper reality of free will. What it gives though is space for freedom within the bounds of our experience. Whether beyond the limit of experience we have free will or not may be a question, but it is not an operative one.
 
+Leaving space open for the possibility of free will could perhaps be developed into a satisfying response. The route could be taken that the operative impossibility of determining the answer to the question of free will is positively arguing for free will. What we have is freedom from the answer to this question.
+
 ### Compatible or Incompatible?
 
 Following immediately on from this response to determinism, it's convenient to briefly discuss where this position falls in the compatible vs. incompatible distinction. The compatability in question is whether free will is compatible with determinism (let's agree determinism is real for now).[^4] Incompatibilists argue that free will is not compatible with determinism.
 
 [^4]: Again SEP on [compatibilism](https://plato.stanford.edu/entries/compatibilism/).
 
-I've not thought too much about this, but I would be immediately tempted to suggest that this kind of free will is invariant to determinism, which I suppose is a kind of compatibilism.
+I've not thought too much about this, but I would be immediately tempted to suggest that this kind of free will is invariant to determinism, which I suppose is a kind of compatibilism. Invariance seems like a more accurate term event though this account is not made impossible by the existence of determinism, therefore being compatible. What we have is that this account _cannot_ be effected by the status of determinism, in other words, the questions of free will and determinism are independent.
 
 ## Conclusion
 
-Alright, well that's all I've got at the moment. I think there's something here but this post became somewhat bogged down by technicalities. I feel that we did not reach deeper insights about the nature of uniqueness well enough, but that's good to know since it clarifies my desire for this. Positively, uniqueness seems to be useful in making space for individuals to claim free will, if they so desire.
+Alright, well that's all I've got at the moment. I think there's something here but this post became somewhat bogged down by technicalities. I feel that we did not reach deeper insights about the nature of uniqueness well enough, but that's good to know since it clarifies my desire for this. Positively, uniqueness seems to be useful in making space for individuals to claim free will, if they so desire. Furthermore, utilising an operative stance gives us tools to tackle these questions.
 
 If this position does not already have a name then maybe we can make one up. How about Being Uniquely Free? We're all BUF? ...no?
+
+### Acknowledgements 
+
+Thanks to my friend Tom Cattermole for discussing this with me. He asks a good question, what is the use of this freedom?
 
 <br>
