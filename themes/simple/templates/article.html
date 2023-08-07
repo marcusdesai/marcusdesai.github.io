@@ -6,6 +6,7 @@
     {% assets filters="libsass,cssmin", output="css/style.css", "css/style.scss" %}
     <link rel="stylesheet" href="{{ SITEURL }}/{{ ASSET_URL }}">
     {% endassets %}
+    <link rel="canonical" href="{{ SITEURL }}/{{ article.url }}">
 </head>
 <body class="default-body">
     <nav class="flex justify-between w-100">
@@ -18,6 +19,10 @@
                 <h2 class="mt0 mb5">
                     <time itemprop="datePublished" datetime="{{ article.date.strftime('%Y-%m-%d') }}">{{ article.date.strftime('%Y-%m-%d') }}</time>
                 </h2>
+                <div itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <meta itemprop="name" content="{{ article.author }}">
+                    <meta itemprop="url" content="{{ SITEURL }}">
+                </div>
                 <div itemprop="articleBody">{{ article.content }}</div>
             </div>
         </article>
