@@ -90,7 +90,7 @@ Following immediately on from this response to determinism, it's convenient to b
 
 [^4]: Again SEP on [compatibilism](https://plato.stanford.edu/entries/compatibilism/).
 
-I've not thought too much about this, but I would be immediately tempted to suggest that this kind of free will is invariant to determinism, which I suppose is a kind of compatibilism. Invariance seems like a more accurate term event though this account is not made impossible by the existence of determinism, therefore being compatible. What we have is that this account _cannot_ be effected by the status of determinism, in other words, the questions of free will and determinism are independent.
+I've not thought too much about this, but I would be immediately tempted to suggest that this kind of free will is invariant to determinism, which I suppose is a kind of compatibilism. Invariance seems a more accurate term, even though this account is compatible with the existence of determinism, because this freedom is not effected by the status of determinism. The questions of free will and determinism are independent, hence invariance.
 
 ## Conclusion
 
