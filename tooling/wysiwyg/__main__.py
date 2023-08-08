@@ -30,6 +30,15 @@ def get_date(content: str) -> date:
     return date.fromisoformat(post_date)
 
 
+def chrome_mobile_emulator() -> webdriver.Chrome:
+    mobile_emulation = {
+        "deviceName": "iPhone X"  # You can choose other device names too
+    }
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
+    return webdriver.Chrome(options=chrome_options)
+
+
 class Driver:
     def __init__(self) -> None:
         self.driver = webdriver.Firefox()
