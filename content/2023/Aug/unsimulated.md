@@ -52,10 +52,10 @@ For something to be operatively real, it must be able to be part of our experien
 
 Applying this distinction: actions can be reality simulated, but not model simulated. Naturally, by whatever means reality occurs, it must be true that reality makes a person's actions. Indeed, anything in our reality must be a consequence of that reality.
 
-Model simulation cannot make your actions because these simulations can be part of your experience. As part of your experience, a model simulator must be able to simulate your awareness of the simulator. In other words, your simulated actions are the actions you take in the reality containing a simulator. actions without the possibility of experiencing the simulator cannot be simulated.
+Model simulation cannot make your actions because these simulations can be part of your experience. As part of your experience, a model simulator must be able to simulate your awareness of the simulator. In other words, your simulated actions are the actions you take in the reality containing a simulator. Actions without the possibility of experiencing the simulator cannot be simulated.
 
 Yes, the simulator could be hidden and not take part in some circumstance of action for which it also provides a prediction. Claiming this is not enough though, because it leaves the gap for actions which could occur in the presence of the simulator. So the simulator cannot ever give a complete picture of the actions of a person. 
-
+ 
 This is only an argument by technicality, but I think it meaningful in evoking that simulations are always incomplete in some respect, that there will always be a perspective from which a model lacks veracity. Deeper still, we're touching upon a criteria for uniqueness which excludes duplicated circumstances, which cannot effect the original, from dispelling the uniqueness. 
 
 #### Person in a Box

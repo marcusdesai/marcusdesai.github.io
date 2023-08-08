@@ -17,6 +17,12 @@ DEFAULT_METADATA = {
 DEFAULT_LANG = "en"
 DEFAULT_PAGINATION = False
 
+EXTRA_PATH_METADATA = {
+    "images/favicon.ico": {"path": "favicon.ico"},
+    "images/favicon-16x16.png": {"path": "favicon-16x16.png"},
+    "images/favicon-32x32.png": {"path": "favicon-32x32.png"},
+}
+
 FEED_ALL_ATOM = None
 
 MARKDOWN = {
@@ -45,7 +51,7 @@ SITEMAP = {
 }
 SITENAME = "MRCSD Blog"
 SITEURL = "http://localhost:8000"
-STATIC_PATHS = []
+STATIC_PATHS = ["images"]
 
 TAG_SAVE_AS = ""
 TAGS_SAVE_AS = ""
