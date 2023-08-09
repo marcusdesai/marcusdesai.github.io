@@ -1,10 +1,12 @@
 import re
+import sys
 import time
 from collections.abc import Iterator
 from datetime import date
 from pathlib import Path
 from queue import Queue
 from selenium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver
 from threading import Lock
 from typing import Any, Final
 from watchdog.events import FileModifiedEvent, FileSystemEvent, FileSystemEventHandler
@@ -39,29 +41,46 @@ def chrome_mobile_emulator() -> webdriver.Chrome:
     return webdriver.Chrome(options=chrome_options)
 
 
-class Driver:
-    def __init__(self) -> None:
-        self.driver = webdriver.Firefox()
+def make_driver(name: str) -> WebDriver:
+    match name:
+        case "firefox":
+            return webdriver.Firefox()
+        case "chrome":
+            return webdriver.Chrome()
+        case "mobile":
+            return chrome_mobile_emulator()
+        case "":
+            return webdriver.Firefox()
+        case other:
+            msg = f"driver name not recognised {other}"
+            raise NotImplementedError(msg)
+
+
+def page_y_offset(driver: WebDriver) -> Any:  # noqa: ANN401
+    return driver.execute_script("return window.pageYOffset")
+
+
+def page_scroll_to(driver: WebDriver, offset: Any) -> None:  # noqa: ANN401
+    driver.execute_script(f"window.scrollTo(0, {offset});")
+
+
+class Reloader:
+    def __init__(self, driver: str) -> None:
+        self.driver = make_driver(driver)
         self.page = str(BASE_URL)
         self.driver.get(self.page)
 
     def refresh(self, url: Path | None = None) -> None:
         url = self.driver.current_url if url is None else str(url)
         if self.page == url:
-            scroll_height = self.page_y_offset()
+            offset = page_y_offset(self.driver)
             self.driver.get(self.page)
             self.driver.refresh()
-            self.page_scroll_to(scroll_height)
+            page_scroll_to(self.driver, offset)
         else:
             self.page = url
             self.driver.get(self.page)
             self.driver.refresh()
-
-    def page_y_offset(self) -> Any:  # noqa: ANN401
-        return self.driver.execute_script("return window.pageYOffset")
-
-    def page_scroll_to(self, scroll_height: Any) -> None:  # noqa: ANN401
-        self.driver.execute_script(f"window.scrollTo(0, {scroll_height});")
 
     def refresh_changed(self, changed: list[str]) -> None:
         url = None
@@ -115,23 +134,25 @@ class SiteHandler(FileSystemEventHandler):
                     self.content_changes.put(path, block=False)
 
 
-def auto_refresh() -> None:
+def auto_refresh(driver: str) -> None:
     site_changes = Queue()
     site_handler = SiteHandler(site_changes)
-
     output_changes = Queue()
-    driver = Driver()
+    output_handler = OutputHandler(output_changes)
+
     observer = Observer()
     observer.schedule(site_handler, "content", recursive=True)
     observer.schedule(site_handler, "themes/simple/templates")
-    observer.schedule(OutputHandler(output_changes), "output", recursive=True)
+    observer.schedule(output_handler, "output", recursive=True)
     observer.start()
+
+    reloader = Reloader(driver)
     try:
         while True:
             with LOCK:
                 if len(list(drain_queue(output_changes))) > 0:
                     changed = list(drain_queue(site_changes))
-                    driver.refresh_changed(changed)
+                    reloader.refresh_changed(changed)
             time.sleep(0.5)
     except KeyboardInterrupt:
         pass
@@ -141,4 +162,4 @@ def auto_refresh() -> None:
 
 
 if __name__ == "__main__":
-    auto_refresh()
+    auto_refresh(sys.argv[1])

@@ -29,7 +29,8 @@ if [[ "$1" == *"serve"* ]]; then
 
   pelican -lr "${INPUT_DIR}" -o "${OUTPUT_DIR}" -s "${LOCAL_CONF}" &
   pelican_pid=$!
-  python -m tooling.wysiwyg &
+  sleep 2
+  python -m tooling.wysiwyg "$2" &
   python_pid=$!
   wait $pelican_pid $python_pid
 fi
