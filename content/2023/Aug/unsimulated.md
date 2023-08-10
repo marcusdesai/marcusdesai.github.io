@@ -3,6 +3,7 @@ Date: 2023-08-07
 Slug: freedom-in-being
 Category: philosophy
 Status: published
+Tags: philosophy, free will, determinism
 
 I've been toying with a conceptualisation of free will for a while, it's not fully formed but I want to write about it and try to sketch it out and make it more concrete.
 

@@ -32,6 +32,7 @@
                         <span itemprop="headline">{{ article.title }}</span>
                     </a>
                 </h2>
+                <meta itemprop="keywords" content="{{ article.tags|join(', ') }}">
                 <div itemprop="author" itemscope itemtype="https://schema.org/Person">
                     <meta itemprop="name" content="{{ article.author }}">
                     <meta itemprop="url" content="{{ SITEURL }}">

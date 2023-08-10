@@ -3,6 +3,7 @@ Date: 2023-08-05
 Slug: leadership-not-control
 Category: opinion
 Status: published
+Tags: politics, climate, labour
 
 Disappointed was my overriding feeling witnessing the Labour leadership's [response][lab-resp] to the 2023 Uxbridge by-election loss. Where we might expect to find a robust defense of Labour policies, we instead have an inward looking rush to assign blame, usually the stuff of general election defeats.
 

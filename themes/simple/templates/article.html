@@ -26,6 +26,7 @@
                     <meta itemprop="name" content="{{ article.author }}">
                     <meta itemprop="url" content="{{ SITEURL }}">
                 </div>
+                <meta itemprop="keywords" content="{{ article.tags|join(', ') }}">
                 <div itemprop="articleBody">{{ article.content }}</div>
             </div>
         </article>

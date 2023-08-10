@@ -3,6 +3,7 @@ Date: 2023-08-06
 Slug: py312-generics
 Category: code
 Status: published
+Tags: python, types, features
 
 Just something quick about one of my favourite upcoming Python 3.12 features, generic type parameter syntax!
 
