@@ -207,7 +207,7 @@ $$\textsf{Last}_{0}(\alpha) = \textsf{Last}(\alpha) \cup \varepsilon(\alpha)\\{0
 
 We know what \\(\textsf{Last}(\alpha)\\) is, so we just need to know what this other set (it must be a set because we perform a union) \\(\varepsilon(\alpha)\\{0\\}\\) is.
 
-This particular bit of notation is a bit peculiar, but it's just a very concise way of applying functions using (admitted to) notational abuse. Broda et al define \\(\varepsilon(\alpha)\\) as:
+This particular bit of notation is a somewhat peculiar, but it's just a very concise way of applying functions using (admitted to) notational abuse. Broda et al define \\(\varepsilon(\alpha)\\) as:
 
 $$\varepsilon(\alpha) = \begin{cases}\varepsilon \text{ if }\varepsilon \in \mathcal{L}(\alpha)\\\ \emptyset \text{ otherwise}\end{cases}$$
 
@@ -337,7 +337,7 @@ The position automaton for \\(\alpha\\) is depicted as:
 
 ## Where To Now?
 
-We made it! Although I don't think all the details we've been through lend themselves to a natural & intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Using these definitions will make the ideas more clear, and since we currently we have no proper implementation, the path forward clear. In the next post of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
+We made it! Although I don't think all the details we've been through lend themselves to a natural & intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Since using these definitions will firm up our understanding of these ideas, and since we currently we have no proper implementation, our path forward is easy to choose. In the next post of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
 
 Something of interest, the notions of \\(\textsf{First}\\), \\(\textsf{Last}\\) and \\(\textsf{Follow}\\) that we have encountered here pop up in a lot of places, indeed this whole idea of labelling positions and tracking relationships between them is very useful. For example, the Rust project [uses these sets][rust-sets] to help handle ambiguity in declarative macros (AKA macro-by-example).
 
