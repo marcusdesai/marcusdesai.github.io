@@ -21,6 +21,11 @@ h5 {
     @extend .f5;
 }
 
+a {
+    @extend .link;
+    @extend .blue;
+}
+
 code {
     font-family: monospace;
 }

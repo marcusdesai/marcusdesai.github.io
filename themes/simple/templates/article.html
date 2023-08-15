@@ -12,6 +12,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if article.metadata.mathjax %}
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        let scaleValue = 1;
+        if (screenWidth <= 375) {
+            scaleValue = 0.7;
+        } else if (screenWidth <= 400) {
+            scaleValue = 0.8;
+        } else if (screenWidth <= 425) {
+            scaleValue = 0.9;
+        }
+        MathJax = {
+            chtml: { scale: scaleValue },
+        };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     {% endif %}
 </head>
