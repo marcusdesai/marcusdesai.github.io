@@ -22,7 +22,14 @@ h5 {
 }
 
 code {
-    @extend .code;
+    font-family: monospace;
+}
+
+img {
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 pre {

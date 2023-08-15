@@ -1,0 +1,27 @@
+%! Author = marcusdesai
+%! Date = 15/08/2023
+
+% Preamble
+\documentclass[border=5pt]{standalone}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+% Document
+\begin{document}
+
+    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto]
+        \tikzset{initial text={},initial where=left}
+        \tikzstyle{every initial by arrow}=[initial distance=1em,inner sep=0pt]
+
+        \node[state,initial] (q_0) {$init$};
+        \node[state] (q_1) [right=of q_0] {$state$};
+        \node[state,accepting] (q_2) [right=of q_1] {$final$};
+        \path[->]
+        (q_0) edge [bend left] node {transition} (q_1)
+        (q_1) edge [bend left] node {transition} (q_2);
+    \end{tikzpicture}
+
+\end{document}

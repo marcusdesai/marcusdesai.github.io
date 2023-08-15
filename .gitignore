@@ -1,6 +1,9 @@
 # Misc
 *.log
 
+# Tex
+out/
+
 # Pelican
 output/
 
