@@ -16,7 +16,7 @@ dependencies = [
     "watchdog == 3.0.0",
 ]
 
-[optional-dependencies]
+[project.optional-dependencies]
 dev = [
     "black == 23.7.0",
     "pytest == 7.4.0",
@@ -75,7 +75,7 @@ select = [
 ]
 
 ignore = [
-    # It's fine to shaddow builtin names, as long as the shadowing is namespaced
+    # It's fine to shadow builtin names, as long as the shadowing is namespaced
     "A003",
     # Ignore to avoid annotating all `self` & `cls` args for methods
     "ANN101", "ANN102",

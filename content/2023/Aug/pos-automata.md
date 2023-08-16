@@ -1,9 +1,10 @@
 Title: Automata Part 1: Understanding Position Automata
-Date: 2023-08-07
+Date: 2023-08-16
 Slug: position-automata
 Category: code
-Tags: regex, automata, NFA, python, glushkov automata, position automata
+Tags: regex, automata, nfa, python, glushkov, position automata, theory
 Mathjax: true
+Status: published
 
 This is the first post in a series on coding up algorithms for constructing automata from regexes.
 
@@ -16,7 +17,7 @@ A quick note before we begin: I will link to relevant wikipedia pages, but in my
     Hello JS turn-offs 👋 This page uses JS for one purpose only, which is to enable rendering latex using mathjax. The readability is significantly impacted without this, but not critically IMO.<br><br>
 </noscript>
 
-<div class="b f2">Table of Contents</div>
+<div class="b f2">Contents</div>
 
 [TOC]
 
@@ -24,9 +25,9 @@ A quick note before we begin: I will link to relevant wikipedia pages, but in my
 
 I've long been drawn to [Finite State Machines][fsm-wiki] (FSM) and [Automata Theory][automata-wiki]. These areas of study enjoy a close relationship with the day to day practicalities of programs because, for all their theoretical nature, they directly specify methods for how we can make regexes usable. But drawing out that relationship is easier said than done! I've stared blankly at many a dense paper, willing myself to understand and achieving precisely nothing.
 
-Anyway, I recently read Andrew Gallant's (AKA burntsushi) excellent and long (very long) [post][ag-ri] on the internals of the regex-automata crate. Naturally automata are discussed in detail, a central topic being [Nondeterministic Finite Automata][nfa-wiki] (NFA). One thing that jumped out to me was the [section][ag-ri-fut] on future work mentioning [Glushkov's NFA construction][glushkov-wiki] \[[2](#ref-2)]. I was interested to learn about this, and more so, to investigate the various ways of constructing automata from regexes.
+Anyway, I recently read Andrew Gallant's (AKA burntsushi) excellent and long (very long) [post][ag-ri] on the internals of the regex-automata [crate][crate-ra]. Naturally automata are discussed in detail, a central topic being [Nondeterministic Finite Automata][nfa-wiki] (NFA). One thing that jumped out to me was the [section][ag-ri-fut] on future work mentioning [Glushkov's NFA construction][glushkov-wiki] \[[2](#ref-2)]. I was interested to learn about this, and more so, to investigate the various ways of constructing automata from regexes.
 
-As you may have guessed from the intro, this was not as easy as looking up a few definitions and throwing together some code. It's more: Act 1 Scene 1, Marcus hits a brick wall of understanding. Eventually though I think I've found some clarity on these ideas, and this is what I want to share with you because it's what I wish I'd been able to read when I didn't understand. First off, you may be wondering why this post's title includes Position automata (PA) when I've yet to mention the term? Well Position automaton is just another name for Glushkov's automaton! Already one bit of clarity provided I hope, btw I'm just going to use the PA abbreviation from now on.
+As you may have guessed from this intro, this was not as easy as looking up a few definitions and throwing together some code. It's more: Act 1 Scene 1, Marcus hits a brick wall of understanding. Eventually though I think I've found some clarity on these ideas, and this is what I want to share with you because it's what I wish I'd been able to read when I didn't understand. First off, you may be wondering why this post's title includes Position automata (PA) when I've yet to mention the term? **Position automaton is just another name for Glushkov's automaton!** Already one bit of clarity provided I hope, btw I'm just going to use the PA abbreviation from now on.
 
 ## Defining Automata
 
@@ -47,15 +48,16 @@ Let's implement this in a very literal fashion, to make the connections clear. S
 ```python
 class Automata:
     def __init__(self):
-        self.states: set[int]
-        self.symbols: set[str]
-        self.initial: int
-        self.final: set[int]
+        self.states: set[int]   # Q
+        self.symbols: set[str]  # Sigma
+        self.initial: int       # I
+        self.final: set[int]    # F
 
-    # return None when the given (state, symbol) pair 
-    # does not have a corresponding transition state
+    # delta
     @staticmethod
     def transition(state: int, symbol: str) -> int | None:
+        # return None when the given (state, symbol) pair 
+        # does not have a corresponding transition state
         ...
 ```
 
@@ -102,7 +104,7 @@ Okay, let's get stuck in to the details of PA, starting again with the formal de
 
 $$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{POS}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
 
-There's a lot more going on here, but we're just going to break it down element by element. To start with, \\(\Sigma\\) means exactly the same thing it did before, it's the set of symbols the automata recognises, and the start state is just whichever state is corresponds to an index \\(0\\) (which will make more sense in a bit).
+There's a lot more going on here, but we're just going to break it down element by element. To start with, \\(\Sigma\\) means exactly the same thing it did before, it's the set of symbols the automata recognises, and the start state is just whichever state corresponds to an index \\(0\\) (which will make more sense in a bit).
 
 ### \\(\textsf{Pos}\_{0}(\alpha)\\)
 
@@ -140,7 +142,7 @@ This does come across in the formal definition, look for where \\(\sigma_{i}\\) 
 
 $$\textsf{Last}(\alpha) = \\{i \mid w\sigma_{i}\in \mathcal{L}(\overline{\alpha})\\}$$
 
-This kind of set notation is analogous to comprehensions in Python, we can read the above statement as: \\(i\\) for \\(w\sigma_{i}\\) in \\(\mathcal{L}(\overline{\alpha})\\). By the way, \\(\sigma\in\Sigma\\).
+This kind of [set building notation][set-nota] is analogous to comprehensions in Python, we can read the above statement as: \\(i\\) for \\(w\sigma_{i}\\) in \\(\mathcal{L}(\overline{\alpha})\\). By the way, \\(\sigma\in\Sigma\\).
 
 <details>
     <summary>Set Comprehension Examples</summary>
@@ -204,7 +206,7 @@ $$\textsf{Last}_{0}(\alpha) = \textsf{Last}(\alpha) \cup \varepsilon(\alpha)\\{0
 
 We know what \\(\textsf{Last}(\alpha)\\) is, so we just need to know what this other set \\(\varepsilon(\alpha)\\{0\\}\\) is (it must be a set because we perform a union).
 
-This particular bit of notation is a somewhat peculiar, not least because \\(\varepsilon\\) is used as a function, but it's just a very concise way of choosing and applying functions using (admitted to) notational abuse. Broda et al. define \\(\varepsilon(\alpha)\\) as:
+This particular bit of notation is somewhat peculiar, not least because \\(\varepsilon\\) is used as a function, but it's just a very concise way of choosing and applying functions using notational abuse (admitted to by the authors). Broda et al. define \\(\varepsilon(\alpha)\\) as:
 
 $$\varepsilon(\alpha) = \begin{cases}\varepsilon \text{ if }\varepsilon \in \mathcal{L}(\alpha)\\\ \emptyset \text{ otherwise}\end{cases}$$
 
@@ -276,7 +278,7 @@ Nothing too fancy, and understanding this is just down to grasping \\(\textsf{Fo
 
 $$\textsf{Follow}(\alpha, i) = \\{j \mid (i, j) \in \textsf{Follow}(\alpha)\\}$$
 
-We still don't know what \\(\textsf{Follow}\\) is, so lets keep going.
+We still don't know what \\(\textsf{Follow}(\alpha)\\) is, so lets keep going.
 
 $$\textsf{Follow}(\alpha) = \\{(i, j) \mid u\sigma\_{i}\sigma\_{j}v \in \mathcal{L}(\overline{\alpha})\\}$$
 
@@ -302,7 +304,7 @@ At which point you may be exclaiming "not another definition" in frustration! Do
 
 $$\textsf{First}(\alpha) = \\{i \mid \sigma_{i}w\in \mathcal{L}(\overline{\alpha})\\}$$
 
-Yep, we just put \\(\sigma\_{i}\\) before \\(w\\). I'm not going to go through all the steps again, suffice to say that for our example regex, we have:
+Yep, we just put \\(\sigma\_{i}\\) before \\(w\\). I'm not going to go through all the explanatory steps again (exercise for the reader as they say), suffice to state that for our example regex, we have:
 
 $$\textsf{First}(\alpha) = \\{1\\}$$
 
@@ -379,9 +381,13 @@ $$\delta_{POS}(0, a) = \{1, 3\}$$
 
 ## Where To Now?
 
-We made it! Although I don't think all the details we've been through lend themselves to a natural & intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Since using these definitions will firm up our understanding of these ideas, and since we currently we have no proper implementation, our path forward is easy to choose. In the next post of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
+We made it! Although I don't think all the details we've been through necessarily lend themselves to a natural and intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Since using these definitions will firm up our understanding of these ideas, and since we currently we have no proper implementation, our path forward is easy to choose. In the next post of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
 
 Something of interest, the notions of \\(\textsf{First}\\), \\(\textsf{Last}\\) and \\(\textsf{Follow}\\) that we have encountered here pop up in a lot of places, indeed this whole idea of labelling positions and tracking relationships between them is very useful. For example, the Rust project [uses these sets][rust-sets] to help handle ambiguity in declarative macros (AKA macro-by-example).
+
+### Acknowledgements
+
+Thanks to my friend Declan Kolakowski for proof reading the draft of this post.
 
 ## References
 
@@ -398,3 +404,5 @@ Something of interest, the notions of \\(\textsf{First}\\), \\(\textsf{Last}\\) 
 [nfa-wiki]: https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
 [re-formal-wiki]: https://en.wikipedia.org/wiki/Regular_expression#Formal_definition
 [rust-sets]: https://doc.rust-lang.org/reference/macro-ambiguity.html#first-and-follow-informally
+[crate-ra]: https://crates.io/crates/regex-automata
+[set-nota]: https://en.wikipedia.org/wiki/Set-builder_notation
