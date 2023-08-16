@@ -28,8 +28,6 @@ Anyway, I recently read Andrew Gallant's (AKA burntsushi) excellent and long (ve
 
 As you may have guessed from the intro, this was not as easy as looking up a few definitions and throwing together some code. It's more: Act 1 Scene 1, Marcus hits a brick wall of understanding. Eventually though I think I've found some clarity on these ideas, and this is what I want to share with you because it's what I wish I'd been able to read when I didn't understand. First off, you may be wondering why this post's title includes Position automata (PA) when I've yet to mention the term? Well Position automaton is just another name for Glushkov's automaton! Already one bit of clarity provided I hope, btw I'm just going to use the PA abbreviation from now on.
 
-[//]: # (Now though let's take a step back and start from the start, looking at what automata are, how they relate to regexes, and how we "construct" an automaton from a regex. That's already quite a bit, but I really want to cover PA as well because then I will have left you with something more than just preliminaries by the end of this post.)
-
 ## Defining Automata
 
 In this series we'll be following the constructions provided in the paper: 'On the mother of all automata: the position automaton' \[[1](#ref-1)] by Sabine Broda, Markus Holzer, Eva Maia, Nelma Moreira, and Rogério Reis. This paper is both clear and interesting, if you're curious how different automata relate to one another, or about the formal properties of various constructions, then it wont waste your time.
@@ -72,8 +70,7 @@ State diagrams are an intuitive visual aid to understanding automata. We depict 
 <details>
     <summary>Example Automata</summary>
 
-<br>
-Consider the regex <code>"ace"</code>, which can be converted to: 
+<p>Consider the regex <code>"ace"</code>, which can be converted to:</p> 
 
 ```python
 class Automata:
@@ -93,7 +90,7 @@ class Automata:
         return table.get((state, symbol))
 ```
 
-This automata is depicted by this state diagram:
+<p>This automata is depicted by this state diagram:</p>
 
 <p><img alt="The automata constructed from the regex 'ace'" src="{static}/images/2023/Aug/pos-automata/sd-ace.jpeg" title="'ace' Regex State Diagram"></p>
 
@@ -121,11 +118,11 @@ There's a lot more going on here, but we're just going to break it down element 
 
 Okay so what's \\(\textsf{Pos}(\alpha)\\)? This set contains numbers used to index each symbol that occurs in a given regex. Let's say we have a regex:
 
-$$\alpha = a(ba\*b)\*$$
+$$\alpha = a(ba{\*}b)\*$$
 
 Then the corresponding _marked_ regular expression is given by indexing all the symbols, meaning we mark the elements of \\(\Sigma\\) which occur in the regex. It's important to note that we start counting indexes from \\(1\\) not \\(0\\).
 
-$$\overline{\alpha} = a_{1}(b_{2}a_{3}\*b_{4})\*$$
+$$\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*$$
 
 Since \\(\textsf{Pos}(\alpha)\\) just contains these index numbers, we have:
 
@@ -187,7 +184,7 @@ With \\(\overline{\alpha}\\) we have the language drawn from symbols with indexe
 
 </details>
 
-Using the same marked regex from earlier, \\(\overline{\alpha} = a_{1}(b_{2}a_{3}\*b_{4})\*\\), let's write down some of the words in its language (words that are matched by the regex).
+Using the same marked regex from earlier, \\(\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*\\), let's write down some of the words in its language (words that are matched by the regex).
 
 $$\mathcal{L}(\overline{\alpha}) = \\{a_{1}, a_{1}b_{2}b_{4}, a_{1}b_{2}a_{3}a_{3}b_{4}, ...\\}$$
 
@@ -199,7 +196,7 @@ $$\textsf{Last}(\alpha) = \\{1, 4\\}$$
 
 We're not done I'm afraid! 😵‍💫
 
-What we actually wanted was \\(\textsf{Last}\_{0}(\alpha)\\), which extends \\(\textsf{Last}\\) to possibly include the starting index \\(0\\). Intuitively, what we want to know is if the regex \\(\alpha\\) accepts the empty word (or string), usually written as \\(\varepsilon\\).
+What we actually wanted was \\(\textsf{Last}\_{0}(\alpha)\\), which extends \\(\textsf{Last}\\) to possibly include the starting index \\(0\\). Intuitively, what we want to know is if the regex \\(\alpha\\) accepts the empty word (or string), usually written as \\(\varepsilon\\) (epsilon).
 
 Starting as always with the definition:
 
@@ -207,7 +204,7 @@ $$\textsf{Last}_{0}(\alpha) = \textsf{Last}(\alpha) \cup \varepsilon(\alpha)\\{0
 
 We know what \\(\textsf{Last}(\alpha)\\) is, so we just need to know what this other set (it must be a set because we perform a union) \\(\varepsilon(\alpha)\\{0\\}\\) is.
 
-This particular bit of notation is a somewhat peculiar, but it's just a very concise way of applying functions using (admitted to) notational abuse. Broda et al define \\(\varepsilon(\alpha)\\) as:
+This particular bit of notation is a somewhat peculiar, not least as \\(\varepsilon\\) is used as a function, but it's just a very concise way of choosing and applying functions using (admitted to) notational abuse. Broda et al define \\(\varepsilon(\alpha)\\) as:
 
 $$\varepsilon(\alpha) = \begin{cases}\varepsilon \text{ if }\varepsilon \in \mathcal{L}(\alpha)\\\ \emptyset \text{ otherwise}\end{cases}$$
 
@@ -235,7 +232,7 @@ $$\emptyset S = \emptyset$$
 
 Where \\(S\\) is any set. So \\(\varepsilon\\) applied to any set is just that set, and applying \\(\emptyset\\) returns the empty set.
 
-Back to our example \\(\overline{\alpha} = a_{1}(b_{2}a_{3}\*b_{4})\*\\). This regex cannot accept the empty word, so: 
+Back to our example \\(\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*\\). This regex cannot accept the empty word, so: 
 
 $$
 \begin{align}
@@ -285,7 +282,7 @@ $$\textsf{Follow}(\alpha) = \\{(i, j) \mid u\sigma\_{i}\sigma\_{j}v \in \mathcal
 
 Aha! This looks familiar, and hopefully this form helps guide the intuition that "following" is just about finding what symbols can follow other symbols in the language of our regex. Essentially \\(\textsf{Follow}\\) determines pairs of marked symbol indexes where the \\(j\\)'th symbol follows the \\(i\\)'th symbol.
 
-Returning to our example \\(\overline{\alpha} = a_{1}(b_{2}a_{3}\*b_{4})\*\\) and some of it's matching words:
+Returning to our example \\(\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*\\) and some of it's matching words:
 
 $$\mathcal{L}(\overline{\alpha}) = \\{a_{1}, a_{1}b_{2}b_{4}, a_{1}b_{2}a_{3}a_{3}b_{4}, ...\\}$$
 
@@ -319,11 +316,13 @@ $$
 \end{align}
 $$
 
+Because \\(\overline{\sigma_{3}} = a\\) and \\(\overline{\sigma_{4}} = b\\).
+
 ### Putting it All Together
 
 $$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{POS}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
 
-Let \\(\alpha = a(ba\*b)\*\\), and so we have \\(\overline{\alpha} = a_{1}(b_{2}a_{3}\*b_{4})\*\\).
+Let \\(\alpha = a(ba{\*}b)\*\\), and so we have \\(\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*\\).
 
 - \\(\Sigma = abcd...\\)
 - \\(\textsf{Pos}\_{0}(\alpha) = \\{0, 1, 2, 3, 4\\}\\)
@@ -334,6 +333,49 @@ Let \\(\alpha = a(ba\*b)\*\\), and so we have \\(\overline{\alpha} = a_{1}(b_{2}
 The position automaton for \\(\alpha\\) is depicted as:
 
 ![Position automata diagram for alpha]({static}/images/2023/Aug/pos-automata/sd-pos-ex.jpeg "Alpha Pos Automataon State Diagram")
+
+<details>
+    <summary>Example \(a| b{*}a\)</summary>
+<p>This may appear ambiguous but the usual way of defining alternation tell us how to read this, and in code we would equivalently write <code>(a|b*)a</code></p>
+
+<p>Let \(\alpha = a | b{*}a\), so \(\overline{\alpha} = a_{1} | b_{2}{*}a_{3}\).</p>
+
+<ul>
+<li>\(\textsf{Pos}_{0}(\alpha) = \{0, 1, 2, 3\}\)</li>
+<li>\(\textsf{Follow}(\alpha) = \{(1, 3), (2, 2), (2, 3)\}\)</li>
+<li>\(\textsf{Follow}(\alpha, 0) = \{1, 2, 3\}\)</li>
+<li>\(\textsf{Last}_{0}(\alpha) = \{3\}\)</li>
+</ul>
+
+<p>State diagram:</p>
+
+<p><img alt="The automata constructed from the regex '(a|b*)a'" src="{static}/images/2023/Aug/pos-automata/sd-alt-ex.jpeg" title="(a|b*)a State Diagram" style="width: 65%"></p>
+
+<p>This diagram let's us observe clearly why PA is a non-deterministic finite automata. This is because there is a (state, symbol) pair which return multiple states from the transition function, instead of only ever returning one state. If \(i = 0\) and \(\sigma = a\), then:</p>
+
+$$\delta_{POS}(0, a) = \{1, 3\}$$
+
+</details>
+
+<details>
+    <summary>Example \(a{*}b*\)</summary>
+
+<p>Let \(\alpha = a{*}b*\), so \(\overline{\alpha} = a_{1}{*}b_{2}*\).</p>
+
+<ul>
+<li>\(\textsf{Pos}_{0}(\alpha) = \{0, 1, 2\}\)</li>
+<li>\(\textsf{Follow}(\alpha) = \{(1, 1), (1, 2), (2, 2)\}\)</li>
+<li>\(\textsf{Follow}(\alpha, 0) = \{1, 2\}\)</li>
+<li>\(\textsf{Last}_{0}(\alpha) = \{0, 1, 2\}\)</li>
+</ul>
+
+<p>State diagram:</p>
+
+<p><img alt="The automata constructed from the regex 'a*b*'" src="{static}/images/2023/Aug/pos-automata/sd-null-ex.jpeg" title="a*b* State Diagram"></p>
+
+<p>In this example we can see that, since this regex accepts the empty word \(\varepsilon\), the initial state \(0\) is also a final state.</p>
+
+</details>
 
 ## Where To Now?
 
