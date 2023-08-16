@@ -136,7 +136,7 @@ $$\textsf{Pos}\_{0}(\alpha) = \\{0, 1, 2, 3, 4\\}$$
 
 ### \\(\textsf{Last}\_{0}(\alpha)\\)
 
-Let's begin by talking about just \\(\textsf{Last}(\alpha)\\). Constructing this set is somewhat more involved, we'll have to cover several more definitions. Intuitively \\(\textsf{Last}(\alpha)\\) contains all the indexes of the symbols in \\(\alpha\\) that can be given last. So when \\(\alpha = \\) `ab`, the position index for `b` would be in \\(\textsf{Last}(\alpha)\\).
+Let's begin by talking about just \\(\textsf{Last}(\alpha)\\). Constructing this set is somewhat more involved, we'll have to cover several more definitions. Intuitively \\(\textsf{Last}(\alpha)\\) contains all the indexes of the symbols in \\(\overline{\alpha}\\) that can occur last in words matched by the regex. So when \\(\alpha = \\) `ab`, the position index for `b` would be in \\(\textsf{Last}(\alpha)\\).
 
 This does come across in the formal definition, look for where \\(\sigma_{i}\\) is placed:
 
@@ -387,7 +387,7 @@ Something of interest, the notions of \\(\textsf{First}\\), \\(\textsf{Last}\\) 
 
 ### Acknowledgements
 
-Thanks to my friend Declan Kolakowski for proof reading the draft of this post.
+Thanks to my friend [Declan Kolakowski][dec-gh] for proof reading the draft of this post.
 
 ## References
 
@@ -406,3 +406,4 @@ Thanks to my friend Declan Kolakowski for proof reading the draft of this post.
 [rust-sets]: https://doc.rust-lang.org/reference/macro-ambiguity.html#first-and-follow-informally
 [crate-ra]: https://crates.io/crates/regex-automata
 [set-nota]: https://en.wikipedia.org/wiki/Set-builder_notation
+[dec-gh]: https://github.com/dpwdec
