@@ -202,9 +202,9 @@ Starting as always with the definition:
 
 $$\textsf{Last}_{0}(\alpha) = \textsf{Last}(\alpha) \cup \varepsilon(\alpha)\\{0\\}$$
 
-We know what \\(\textsf{Last}(\alpha)\\) is, so we just need to know what this other set (it must be a set because we perform a union) \\(\varepsilon(\alpha)\\{0\\}\\) is.
+We know what \\(\textsf{Last}(\alpha)\\) is, so we just need to know what this other set \\(\varepsilon(\alpha)\\{0\\}\\) is (it must be a set because we perform a union).
 
-This particular bit of notation is a somewhat peculiar, not least as \\(\varepsilon\\) is used as a function, but it's just a very concise way of choosing and applying functions using (admitted to) notational abuse. Broda et al define \\(\varepsilon(\alpha)\\) as:
+This particular bit of notation is a somewhat peculiar, not least because \\(\varepsilon\\) is used as a function, but it's just a very concise way of choosing and applying functions using (admitted to) notational abuse. Broda et al. define \\(\varepsilon(\alpha)\\) as:
 
 $$\varepsilon(\alpha) = \begin{cases}\varepsilon \text{ if }\varepsilon \in \mathcal{L}(\alpha)\\\ \emptyset \text{ otherwise}\end{cases}$$
 
@@ -351,7 +351,7 @@ The position automaton for \\(\alpha\\) is depicted as:
 
 <p><img alt="The automata constructed from the regex '(a|b*)a'" src="{static}/images/2023/Aug/pos-automata/sd-alt-ex.jpeg" title="(a|b*)a State Diagram" style="width: 65%"></p>
 
-<p>This diagram let's us observe clearly why PA is a non-deterministic finite automata. This is because there is a (state, symbol) pair which return multiple states from the transition function, instead of only ever returning one state. If \(i = 0\) and \(\sigma = a\), then:</p>
+<p>This diagram let's us observe clearly why PA is a non-deterministic finite automata, because multiple states can be returned from the transition function, instead of only ever returning one. For example, if \(i = 0\) and \(\sigma = a\), then:</p>
 
 $$\delta_{POS}(0, a) = \{1, 3\}$$
 
