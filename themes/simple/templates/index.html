@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ SITEURL }}/{{ ASSET_URL }}">
     {% endassets %}
     <link rel="canonical" href="{{ SITEURL }}">
+    <link rel="alternate" type="application/atom+xml" title="All posts" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="{{ SITEURL }}/{{ FEED_ALL_RSS }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ SITEURL }}/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ SITEURL }}/favicon-16x16.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,10 +19,15 @@
             <h1 class="nav-title" itemprop="headline">
                 <a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a>
             </h1>
+            <div class="flex justify-center di flex-column mr2">
+                <span class="f3 b mb1">Feed</span>
+                <a class="link black mb1" href="{{ SITEURL }}/{{ FEED_ALL_RSS }}">RSS</a>
+                <a class="link black" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">Atom</a>
+            </div>
         </nav>
 
         <main>
-            <div class="ml1 b--dashed flex-row pa3 dib mb3">
+            <div class="ml1 b--dashed flex-row pa3 dib mb3" style="border-width: 0.25em">
                 Yo 👋<br><br>I'm Marcus<br><br>Welcome to my blog
             </div>
 

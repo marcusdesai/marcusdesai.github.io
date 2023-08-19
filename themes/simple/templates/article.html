@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ SITEURL }}/{{ ASSET_URL }}">
     {% endassets %}
     <link rel="canonical" href="{{ SITEURL }}/{{ article.url }}">
+    <link rel="alternate" type="application/atom+xml" title="All posts" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">
+    <link rel="alternate" type="application/rss+xml" title="All posts" href="{{ SITEURL }}/{{ FEED_ALL_RSS }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ SITEURL }}/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ SITEURL }}/favicon-16x16.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +33,9 @@
 </head>
 <body class="default-body">
     <nav class="flex justify-between w-100">
-        <h1 class="nav-title"><a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a></h1>
+        <h1 class="nav-title">
+            <a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a>
+        </h1>
     </nav>
     <main>
         <article class="article-p" itemscope itemtype="https://schema.org/BlogPosting">

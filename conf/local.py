@@ -23,7 +23,8 @@ EXTRA_PATH_METADATA = {
     "images/favicon-32x32.png": {"path": "favicon-32x32.png"},
 }
 
-FEED_ALL_ATOM = None
+FEED_ALL_ATOM = "feeds/all.atom.xml"
+FEED_ALL_RSS = "feeds/all.rss.xml"
 
 MARKDOWN = {
     "extension_configs": {
