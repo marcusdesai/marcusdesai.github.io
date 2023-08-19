@@ -36,6 +36,11 @@
         <h1 class="nav-title">
             <a class="black link" href="{{ SITEURL }}">{{ SITENAME }}</a>
         </h1>
+        <div class="flex justify-center di flex-column mr2">
+            <span class="f3 b mb1">Feed</span>
+            <a class="link black mb1" href="{{ SITEURL }}/{{ FEED_ALL_RSS }}">RSS</a>
+            <a class="link black" href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}">Atom</a>
+        </div>
     </nav>
     <main>
         <article class="article-p" itemscope itemtype="https://schema.org/BlogPosting">
