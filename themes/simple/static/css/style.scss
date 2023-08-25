@@ -68,6 +68,11 @@ pre {
 
 // Custom classes
 
+.inco {
+    font-family: monospace;
+    color: #ff79c6;
+}
+
 .article-p {
     @extend .mt3;
     @extend .mt4-ns;
