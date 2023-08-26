@@ -2,7 +2,7 @@ Title: Automata Part 2: Implementing Position Automata
 Date: 2023-08-16
 Slug: implementing-pos-automata
 Category: code
-Tags: regex, automata, python, position automata, bnf
+Tags: regex, automata, python, position automata, bnf, recursion
 Mathjax: true
 
 This is the second post in my automata series. You can find the companion code for this post [here][impl].
@@ -40,7 +40,7 @@ Surmising these parts we have,
 
 Our task now is provide an implementation of \\(\mathcal{A}\_{POS}\\)! Okay, but what kind of engineering constraints do we have for this? And what does finished look like?
 
-First and foremost this code should be clear, and it's implementation should trace to the definitions we have covered in a straightforward way. I'm not going to place performance considerations over code clarity, so the code is not production ready if what we want is to use this implementation in anger. All code will be in Python 3.11. 
+Two constraints, code should be clear, and should trace to the definitions we cover in a straightforward way. I'm not going to place performance considerations over code clarity, the code is not production ready if what we want is to use this implementation in anger. All code will be Python 3.11.
 
 We're finished when we can check if a string matches a pattern, i.e., whether the string is accepted by the automata. So some function like:
 
@@ -50,13 +50,13 @@ def match(pattern: str, string: str, engine: type[Automata]) -> bool:
     ...
 ```
 
-This includes an explicit engine parameter as we'll eventually test other automata implementations.
+which includes an explicit engine parameter as we'll eventually test other automata implementations.
 
 ### Design
 
-Building \\(\mathcal{A}\_{POS}(\alpha)\\) means extracting the relevant info from a pattern string. We could build ad-hoc processing of the pattern for all this, but my intuition says that this would become unwieldy quickly and be very resistant to future expansions. We want a more structured approach, and recursion seems the obvious answer. Why? Because regexes are recursive and highly composable by nature, we can take advantage of this.
+Building \\(\mathcal{A}\_{POS}(\alpha)\\) means extracting the relevant info from a regex pattern. My intuition says that ad-hoc processing would become unwieldy quickly, and be very resistant to future expansions. We want a more structured approach, recursion seems the obvious answer. Why? Because regexes are recursive and highly composable by nature, we can take advantage of this.
 
-This reason should hopefully become more convincing as we go, but to give some immediate motivation let's consider how regexes themselves are formally defined. Often this is given recursively in the following way,
+This reason should hopefully become more convincing as we go, but to give some immediate motivation let's consider how regexes themselves are formally defined. Often this is done recursively in the following way,
 
 - Given an alphabet \\(\Sigma\\),
 - then every letter \\(\sigma\in\Sigma\\) is a regular expression.[^1]
@@ -67,9 +67,9 @@ When \\(\alpha\\) and \\(\beta\\) are regular expressions,
 - \\(\alpha|\beta\\) is a regular expression (alternation).
 - \\(\alpha\beta\\) is a regular expression (concatenation).
 
-We're not describing semantics here (how these elements behave), we're just laying out the syntactical structure of regexes. Importantly, we can go about attaching semantics to these elements separately from the others. Knowing how to explain more complex behaviour of regexes (such as the makeup of \\(\textsf{Last}_{0}(\alpha)\\)) is just a matter of correctly composing the behaviours of its elements.
+We're not describing semantics here (how these elements behave), we're just laying out the structure of regexes. Importantly, we can go about attaching semantics to each of these elements separately from the others. Knowing how to explain more complex behaviour of regexes (such as the makeup of \\(\textsf{Last}_{0}(\alpha)\\)) is just a matter of correctly composing the behaviour of its elements.
 
-Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{POS}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in Broda et al. \[[1](#ref-1)].
+Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then, to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{POS}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in Broda et al. \[[1](#ref-1)] throughout.
 
 Right, let's get started then!
 
@@ -77,7 +77,7 @@ Right, let's get started then!
 
 Most formal definition implementing work is here, so we'll do it first 😊 You can find the full code for the AST implementation [here][impl-tree].
 
-There's a lot to say about the concept of ASTs themselves, but I want to remain focused on the task at hand. I propose for now we only think about the tree structure we're going to write, without being too concerned with what an AST really is.
+There's a lot to say about the concept of ASTs themselves, but I want to remain focused on the task at hand. I propose for now that we only think about the tree structure we're going to write, without being too concerned with what an AST really is.
 
 First off, we need to map structural elements of patterns to parts of the AST, hence a class for each of these. Not all syntactical elements are mapped and there's more to say about what gets represented in AST or not, let's remain focused though.
 
@@ -150,7 +150,7 @@ $$\textsf{First}(\alpha) = \\{i \mid \sigma_{i}w \in \mathcal{L}(\overline{\alph
 
 which relies on the definition of \\(\mathcal{L}(\overline{\alpha})\\). Here's where disappointment sets in, \\(\mathcal{L}(\overline{\alpha})\\) is the set of (symbol indexed) words accepted by \\(\alpha\\). But this acceptance is exactly what we're trying to calculate! We're only trying to implement \\(\mathcal{A}\_{POS}\\) to figure out whether any string we have is accepted or not by the regex 🫤
 
-We could construct \\(\mathcal{L}(\overline{\alpha})\\), implementing its [recursive definition][wiki-reg-lang]. But this would be equivalent to making a regex engine where all possible words accepted by the regex are constructed before definitions relying on \\(\mathcal{L}(\overline{\alpha})\\) are used. Clearly this would be infinite (due to `*`), and even if we accept this as okay for small regexes (ignoring the redundancy of calculating everything twice), anything complex becomes immediately untenable.
+We could construct \\(\mathcal{L}(\overline{\alpha})\\), implementing its [recursive definition][wiki-reg-lang]. But this would be equivalent to making a regex engine where all possible words accepted by the regex are constructed before definitions relying on \\(\mathcal{L}(\overline{\alpha})\\) are used. Clearly this would be infinite (due to `*`), and even if we accept this as okay for small regexes (ignoring the redundancy of calculating everything twice), anything complicated becomes immediately untenable.
 
 I would argue that using \\(\mathcal{L}(\overline{\alpha})\\) makes this definition of \\(\textsf{First}\\) non-constructive (spiritually if not actually) because we cannot use \\(\mathcal{L}(\overline{\alpha})\\) to effectively build \\(\textsf{First}\\). Non-constructive circularity may be fine in theoretical papers, if one is happy to accept the [philosophical position][wiki-cons][^2] that something like \\(\mathcal{L}(\overline{\alpha})\\) can exist freestanding. For code this will never cut it, we must effectively construct, and so we want effective constructive definitions.
 
@@ -625,7 +625,7 @@ class Concat(Node):
 <li>\(\textsf{Pss}(\beta\gamma) = \textsf{Pos}(\beta)\cup\textsf{Pos}(\gamma)\)</li>
 </ul>
 
-<p>This is pretty easy, so I'll leave constructing an example to the reader. Instead let's look at how we can obtain \(\textsf{Pos}_{0}(\alpha)\) from our \(\textsf{Pos}(\alpha)\).</p>
+<p>This is pretty easy, I'll leave constructing an example to the reader. Instead let's look at how we can obtain \(\textsf{Pos}_{0}(\alpha)\) from our \(\textsf{Pos}(\alpha)\).</p>
 
 $$\textsf{Pos}_{0}(\alpha) = \{i \mid (i, \sigma) \in \textsf{Pos}(\alpha)\} \cup \{0\}$$
 
@@ -633,9 +633,9 @@ $$\textsf{Pos}_{0}(\alpha) = \{i \mid (i, \sigma) \in \textsf{Pos}(\alpha)\} \cu
 
 ## Parser
 
-With that, we're done with the AST implementation. This is a pretty good point to jump out and (hopefully 😇) come back later as we'll be moving onto distinct topics for implementing the parser. Also, if you're here for automata stuff and are not too concerned about [Backus-Naur form][wiki-bnf] (BNF) or [recursive decent parsers][wiki-rdp] then click [here](#automata) to skip to the next section.
+With that, we're done with the AST implementation. This is a pretty good point to jump out and (hopefully 😇) come back later as we'll be moving onto distinct topics for implementing the parser. If you're here for automata stuff and are not too concerned about [Backus-Naur form][wiki-bnf] (BNF) or [recursive decent parsers][wiki-rdp] then click [here](#automata) to skip to the next section.
 
-The regex parser is implemented as a recursive decent parser, and we use BNF to write out the specification for how different syntactical elements are composed together. BNF is very useful to learn about (if you don't already know it) since it's a common subject when talking about parsing. [Python][py-gram], [Rust][rust-gram] and [Go][go-gram] all use BNF, [Extended BNF][wiki-ebnf] or extensions thereof to specify their grammars. 
+The parser is a recursive decent parser, and we use BNF to specify how different syntactical elements are composed together. BNF is very useful to learn about (if you don't already know it) since it's a common subject when talking about parsing. [Python][py-gram], [Rust][rust-gram] and [Go][go-gram] all use BNF, [Extended BNF][wiki-ebnf] or extensions thereof to specify their grammars. 
 
 I'm not going to go fully into the details of BNF or the parser implementation because this post is about automata, not parsing, but we will cover the grammar spec and how this informs the parser code, all of which can be found [here][impl-parse].
 
@@ -661,6 +661,24 @@ We expect to bottom out somewhere, and we could do this by saying (informally) t
 <sub-component> ::= "a" | "b" | ... | "z" | ...
 ```
 
+<details>
+  <summary>Examples</summary>
+
+<p>In the above silly grammar the following would be legal:</p>
+<ul>
+<li>c</li>
+<li>2a2</li>
+<li>22b122</li>
+</ul>
+
+<p>Not Legal:</p>
+<ul>
+<li>1a</li>
+<li>2a22</li>
+</ul>
+
+</details>
+
 ### Grammar
 
 Our regex grammar is very simple, handling only the minimal syntax needed for the kinds of example regexes we've been working with so far. Let's assume that `<char>` is any character that can be in a python string except for, `"("`, `")"`, `"*"` and `"|"`, which are the syntax characters. Then we have the grammar spec,
@@ -672,7 +690,7 @@ Our regex grammar is very simple, handling only the minimal syntax needed for th
 <atom>   ::= <char>   | "(" <alt> ")"
 ``` 
 
-We have no provision for escaping the syntax characters, so they just cannot be part of any string we match. This is one of many reasons why this regex implementation wouldn't be appropriate for general use, but for our purposes it keeps everything simple.
+We have no provision for escaping the syntax characters, so they cannot be part of any string we match. Another reason why this regex implementation wouldn't be appropriate for general use, but for our purposes it keeps everything simple.
 
 ### Implementation
 
@@ -737,21 +755,21 @@ class Parser:
         return self._parse_alt()
 ```
 
-I've tried to cut everything but the underlying structure, so some machinery you might expect to see is omitted, such as tracking position in the token list.
+I've tried to cut everything but the underlying structure, meaning some machinery you might expect to see is omitted, such as tracking position in the token list.
 
 ## Automata
 
-Implementing automata! This is the home stretch now, I'll be honest with you that this post has become much longer than I was anticipating 😅 But I've stuck to my desire to write content I would have wanted to read, and I hope it has been helpful, or at least interesting, to you so far.
+Implementing automata! This is the home stretch now. I'll be honest with you, this post has become much longer than I was anticipating 😅 But I've stuck to my desire to write content I would've' wanted to read. I hope its been helpful, or at least interesting, to you so far.
 
 The full code for this section can be found [here][impl-auto].
 
-Since we're going to want to implement many different automata it will be useful to have a uniform interface for them all, and so again we're going to use an abstract base class.
+Since we're going to want to implement many different automata it will be useful to have a uniform interface for them all, and again we're going to use an abstract base class.
 
-We've already stated way above that we're done when we have a uniform function to test all of our automata with `(pattern, match)` pairs of strings. This function will have to parse each pattern into the given automata, and ask the automata whether it accepts the given match string. So an `accepts` method will be part of the interface.
+Our finishing criteria requires a uniform function to test all of our automata with `(pattern, match)` pairs of strings. This function will have to parse each pattern into an automata, and check whether it accepts the match string. So an `accepts` method will be part of the interface.
 
-The `accepts` method will need to know which state to start in, how to transition from one state to others and whether a state is final or not. Hence, we're going to need methods for `initial`, `final` and `transition` on the base class. These will be abstract methods though because it is exactly the responsibility of each implementation to provide this behaviour, it's what makes them different after all.
+The `accepts` method will need to know how to "drive" the automata. This requires knowing which state to start in, how to transition between states and whether a state is final or not. Hence, we're going to need methods for `initial`, `final` and `transition`. These will be abstract methods because it is exactly the responsibility of each automata to provide this behaviour, it's what makes them different after all.
 
-We've mentioned that we want a uniform method to construct the automata, so this will be in the interface as well. I will implement this as a `from_node` method which will take an instance of `Node`. I don't want to provide a `from_pattern` method, taking a string, to avoid including `Parser` machinery in the `Automata` implementation.
+We want a uniform method to construct the automata as well. I will implement this as a `from_node` method which will take an instance of `Node`. I don't want to provide a `from_pattern` method, taking a string, to avoid including `Parser` machinery in the `Automata` implementation.
 
 ### Base Class
 
@@ -842,7 +860,7 @@ $$
 
 ### Matching
 
-Now we match,
+Now, we match
 
 ```python
 # automata/automata.py
@@ -861,11 +879,11 @@ We handle matching with the empty string as a special case, which is much easier
 
 That's it, we've met our criteria for finishing, and this is where we can stop. I hope I have met my engineering constraint of writing clear code for you. 
 
-All that's really left to do is run the matcher and see how we perform, for peace of mind it's always good to test. We'll end by writing a test to confirm that our automata implementation behaves correctly.
+All that's really left to do is run the matcher and see how we perform, it's always good to test for peace of mind. We'll end by writing a test to confirm that our automata implementation behaves correctly.
 
-## Done
+### Testing
 
-To ensure an automata is behaving correctly we can assert that is conforms to the behaviour of a known working implementation. That'll be Pythons [re module][py-re] then. We'll set up a test which runs the same `(pattern, match)` string pair through both our [match function](#matching) and [re.match][py-re-ma].
+To ensure an automata regex engine behaves correctly, we can assert that it conforms to the behaviour of a known working implementation. That'll be Python's [re module][py-re] then. We'll set up a test which runs the same `(pattern, match)` string pair through both our [match function](#matching) and [re.match][py-re-ma].
 
 All automata test code can be found [here][impl-test].
 
@@ -911,11 +929,11 @@ PATTERNS = {
 
 
 def generate_matches(amount: int) -> Iterator[tuple[str, str, type[Automata]]]:
-  for pattern in PATTERNS:
-    node = Parser(pattern).parse()
-    for match in {make_match(node, 5) for _ in range(amount)}:
-      for engine in ENGINES:
-        yield pattern, match, engine
+    for pattern in PATTERNS:
+        node = Parser(pattern).parse()
+        for match in {make_match(node, 5) for _ in range(amount)}:
+            for engine in ENGINES:
+                yield pattern, match, engine
 
 
 @pytest.mark.parametrize("pattern, match, engine", generate_matches(10))
@@ -927,6 +945,8 @@ def test_generated_matches(pattern: str, match: str, engine: type[Automata]):
 
 The idea is that we take a regex pattern, parse it into our AST and then randomly generate as many matching strings as we want for this regex. Then we just list all the patterns we want to test and finally run against the automata and the re.match simultaneously.
 
+## Done
+
 Ah that's really everything... for now, there's always more stuff 😂 
 
 I find both joy and frustration in the work of a coder almost never being finished, this being no exception. I'm not going to list everything we could change, or improve or anything else; no, let's stay focused. 
@@ -935,11 +955,11 @@ We're all about automata atm, and next post we'll be returning to formal definit
 
 ## Postscript: On Implementing Formalisms
 
-Coding up algorithms from papers can be a somewhat daunting prospect, but I hope that when you look over the code written here you'll see it as ultimately relatively small and simple. The macro scale behaviour of the automata may be complex and sometimes inscrutable, but each elementary part is, by itself, very manageable.
+Translating ideas in papers to code can be a daunting prospect, but I hope that when you look over the code written here you'll see it as ultimately relatively small and simple. The macro scale behaviour of the automata may be complex and sometimes inscrutable, but each elementary part is, by itself, very manageable.
 
-If there is one thing I want people to take away from this post, and indeed this whole series, it's that most of the code a jobbing coder will write every day is often *way more* complicated than the code needed to implement formal definitions.
+If there is one thing I want people to take away from this post, and indeed this whole series, it's that every day code is often *way more* complicated than what's needed to implement formal definitions.
 
-From a difficulty point of view, coding up formal work is very doable, but (and it's a big but) formal work is often not very accessible. My view is that this is often an issue of legibility and differing goals for coders and theorists. Legibility is not a necessary problem, it is a problem of communication, a fundamentally social problem.
+From a difficulty point of view, coding up formal work is very doable, but (and it's a big but) formal work is often not very accessible. My view is that this is often an issue of legibility, of differing goals for coders and theorists. Legibility is not a necessary problem, it is a problem of communication, a fundamentally social problem.
 
 How can we bridge this gap? I consider this to be a more valuable question to ask than answering any specific knowledge question for a simple reason: this question is about unlocking the value of information for as many people as possible.
 
