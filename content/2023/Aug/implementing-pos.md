@@ -1,5 +1,5 @@
 Title: Automata Part 2: Implementing Position Automata
-Date: 2023-08-16
+Date: 2023-08-27
 Slug: implementing-pos-automata
 Category: code
 Tags: regex, automata, python, position automata, bnf, recursion
@@ -7,7 +7,11 @@ Mathjax: true
 
 This is the second post in my automata series. You can find the companion code for this post [here][impl].
 
-Upfront I want to say that this post will be long, and I have a few reasons for this. I'm going to be explicit about each part of the implementation concerning automata, even if I run the risk of covering info and detail that you, the reader may already know. Also, I want to continue looking at formal definitions throughout to establish the similarities and translations between formal language and code.
+Upfront I want to say that this post will be long, with reason. 
+
+I'm going to be explicit about each part of the implementation, even if I run the risk of covering info and detail that you may already know. If you feel confident in your Python reading skills, then consider jumping to reading the code. Understanding of the code may be better served without all this prose.
+
+Also, I want to continue looking at formal definitions throughout to establish the similarities and translations between formal language and code. Do read the post if you are interested in these parallels.
 
 **Audience Assumptions:** awareness of the concepts behind Position automata, or has read [part 1][part-1] of this series. Some Python reading skills.
 
@@ -69,7 +73,7 @@ When \\(\alpha\\) and \\(\beta\\) are regular expressions,
 
 We're not describing semantics here (how these elements behave), we're just laying out the structure of regexes. Importantly, we can go about attaching semantics to each of these elements separately from the others. Knowing how to explain more complex behaviour of regexes (such as the makeup of \\(\textsf{Last}_{0}(\alpha)\\)) is just a matter of correctly composing the behaviour of its elements.
 
-Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then, to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{POS}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in Broda et al. \[[1](#ref-1)] throughout.
+Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then, to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{POS}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in 'On the mother of all automata: the position automaton' by Broda et al. \[[1](#ref-1)] throughout.
 
 Right, let's get started then!
 
@@ -131,7 +135,7 @@ Concat(Symbol("a", 1), Concat(Symbol("b", 2), Symbol("c", 3)))
 
 </details>
 
-Any concrete instance of type `Node` is a regex which we can construct \\(\mathcal{A}\_{POS}\\) from. The primary duty of a `Node` is to provide the information we need to perform this construction. I am going to refer to \\(\textsf{node}\\) as an instance of `Node`, and I will use \\(\textsf{node}\\) and \\(\alpha\\) interchangeably as they are equivalent in meaning.
+Any concrete instance of type `Node` is a regex which we can construct \\(\mathcal{A}\_{POS}\\) from. The primary duty of a `Node` class is to provide the information we need to perform this construction. I am going to refer to \\(\textsf{node}\\) as an instance of `Node`, and I will use \\(\textsf{node}\\) and \\(\alpha\\) interchangeably as they are equivalent in meaning.
 
 Specifically, a \\(\textsf{node}\\) should provide:
 
@@ -164,6 +168,8 @@ Intuitively, a `nullable` regex can accept no input (aka empty input). For `Symb
 - If the root is `Star`, then the regex is nullable as it accepts either zero or more of its child node.
 - If the root is `Alt`, the regex is nullable if either the left _or_ right child is nullable.
 - For `Concat`, the regex is nullable if both left _and_ right children are nullable.
+
+<blockquote class="note">Get used to <code>Alt</code> being the easiest thing ever, "just union" is the answer to every question 😁</blockquote>
 
 <details>
     <summary>Code</summary>
@@ -218,8 +224,6 @@ This should hopefully be unsurprising if we consider the behaviour of some examp
 <li><code>"ab"</code>, <code>"a*b"</code>, <code>"ab*"</code>, <code>"a*b*"</code>.</li>
 </ul>
 
-<blockquote class="note">Get used to <code>Alt</code> being the easiest thing ever, "just union" is the answer to every question 😁</blockquote>
-
 </details>
 
 <details>
@@ -227,7 +231,7 @@ This should hopefully be unsurprising if we consider the behaviour of some examp
 
 <p>It may seem a bit silly, but we don't really want to introduce boolean logic in our formal definitions, it creates a lot more work to pin down definitions for all the logical tools we may refer to. Unlike in coding where we start on a blank page with many many tools already provided (like <span class="inco">True</span>, <span class="inco">False</span> and <span class="inco">and</span> in Python, or the <a href="https://doc.rust-lang.org/std/prelude/index.html">prelude</a> in rust), a blank page paper is truly blank (author assumptions about reader context notwithstanding).</p>
 
-<p>We're going to work with just sets, and then abuse some notation to make everything work as we want. Supposing \(\beta\) and \(\gamma\) are regular expressions and \(\sigma_{i}\in\Sigma\), let's define \(\textsf{null}(\alpha)\) as follows:</p>
+<p>We're going to work with just sets, and then abuse some notation to make everything work as we want. Supposing \(\beta\) and \(\gamma\) are regular expressions and \(\sigma\in\Sigma\), let's define \(\textsf{null}(\alpha)\) as follows:</p>
 
 <ul>
 <li>\(\textsf{null}(\sigma) = \emptyset\), since \(\sigma\) is a single symbol.</li>
@@ -362,17 +366,17 @@ class Concat(Node):
 <li>\(\textsf{Last}(\beta\gamma) = \textsf{null}(\gamma)\textsf{Last}(\beta)\cup\textsf{Last}(\gamma)\)</li>
 </ul>
 
-<p>Pretty straightforward, let's look at an example in full. \(\alpha = a{*}|ba\), so \(\overline{\alpha} = a_{1}{*}|b_{2}a_{3}\), then:</p>
+<p>Pretty straightforward, let's look at an example in full. \(\alpha = (a{*}|b)a\), so \(\overline{\alpha} = (a_{1}{*}|b_{2})a_{3}\), then:</p>
 
 $$
 \begin{align}
-\textsf{First}(\alpha) &= \textsf{First}(a_{1}{*}|b_{2}a_{3}) \\
+\textsf{First}(\alpha) &= \textsf{First}((a_{1}{*}|b_{2})a_{3}) \\
 &= \textsf{First}(a_{1}{*}|b_{2}) \cup \textsf{null}(a_{1}{*}|b_{2})\textsf{First}(a_{3}) \\
 &= \textsf{First}(a_{1}{*}|b_{2}) \cup \{\varepsilon\}\textsf{First}(a_{3}) \\
 &= \textsf{First}(a_{1}{*}|b_{2}) \cup \{3\} \\
 &= \textsf{First}(a_{1}{*}) \cup \textsf{First}(b_{2}) \cup \{3\} \\
 &= \{1, 2, 3\} \\[10pt]
-\textsf{Last}(\alpha) &= \textsf{Last}(a_{1}{*}|b_{2}a_{3}) \\
+\textsf{Last}(\alpha) &= \textsf{Last}((a_{1}{*}|b_{2})a_{3}) \\
 &= \textsf{null}(a_{3})\textsf{Last}(a_{1}{*}|b_{2}) \cup \textsf{Last}(a_{3}) \\
 &= \emptyset\textsf{Last}(a_{1}{*}|b_{2}) \cup \textsf{Last}(a_{3}) \\
 &= \emptyset \cup \textsf{Last}(a_{3}) \\
@@ -527,7 +531,7 @@ assert product(iter_a, iter_b) == result
 <li>\(\textsf{Follow}(\beta\gamma) = \textsf{Follow}(\beta)\cup\textsf{Follow}(\gamma)\cup\textsf{Last}(\beta)\times\textsf{First}(\gamma)\)</li>
 </ul>
 
-<p>An example, \(\alpha = a{*}|ba\), so \(\overline{\alpha} = a_{1}{*}|b_{2}a_{3}\). To keep things a bit cleaner, let's also set:</p> 
+<p>An example, \(\alpha = (a{*}|b)a\), so \(\overline{\alpha} = (a_{1}{*}|b_{2})a_{3}\). To keep things a bit cleaner, let's also set:</p> 
 
 <ul>
 <li>\(\beta = a_{1}{*}\)</li>
@@ -688,7 +692,7 @@ Our regex grammar is very simple, handling only the minimal syntax needed for th
 <concat> ::= <star>   | <star> <concat>
 <star>   ::= <atom>   | <atom> "*"
 <atom>   ::= <char>   | "(" <alt> ")"
-``` 
+```
 
 We have no provision for escaping the syntax characters, so they cannot be part of any string we match. Another reason why this regex implementation wouldn't be appropriate for general use, but for our purposes it keeps everything simple.
 
@@ -755,26 +759,26 @@ class Parser:
         return self._parse_alt()
 ```
 
-I've tried to cut everything but the underlying structure, meaning some machinery you might expect to see is omitted, such as tracking position in the token list.
+I've tried to cut out everything but the underlying structure, meaning some machinery you might expect to see is omitted, such as tracking position in the token list.
 
 ## Automata
 
-Implementing automata! This is the home stretch now. I'll be honest with you, this post has become much longer than I was anticipating 😅 But I've stuck to my desire to write content I would've' wanted to read. I hope its been helpful, or at least interesting, to you so far.
+Implementing automata! This is the home stretch now. I'll be honest with you, this post has become much longer than I was anticipating 😅 But I've stuck to my desire to write content I would've wanted to read. I hope its been helpful, or at least interesting, to you so far.
 
 The full code for this section can be found [here][impl-auto].
 
 Since we're going to want to implement many different automata it will be useful to have a uniform interface for them all, and again we're going to use an abstract base class.
 
-Our finishing criteria requires a uniform function to test all of our automata with `(pattern, match)` pairs of strings. This function will have to parse each pattern into an automata, and check whether it accepts the match string. So an `accepts` method will be part of the interface.
+Our finishing criteria requires a uniform function to test all our automata with `(pattern, match)` pairs of strings. This function will have to parse each `pattern` into an automata, and check whether it accepts the `match` string. So an `accepts` method will be part of the interface.
 
-The `accepts` method will need to know how to "drive" the automata. This requires knowing which state to start in, how to transition between states and whether a state is final or not. Hence, we're going to need methods for `initial`, `final` and `transition`. These will be abstract methods because it is exactly the responsibility of each automata to provide this behaviour, it's what makes them different after all.
+The `accepts` method will need to know how to "drive" the automata. This requires knowing which state to start in, how to transition between states, and whether a state is final or not. Hence, we're going to need methods for `initial`, `final`, and `transition`. These will be abstract methods because it is exactly the responsibility of each automata to provide this behaviour, it's what makes them different after all.
 
-We want a uniform method to construct the automata as well. I will implement this as a `from_node` method which will take an instance of `Node`. I don't want to provide a `from_pattern` method, taking a string, to avoid including `Parser` machinery in the `Automata` implementation.
+We want a uniform method to construct the automata as well. I will implement this as a `from_node` method which will take an instance of `Node`. I don't want to provide a `from_pattern` method, taking a string, in order to avoid including `Parser` machinery in the `Automata` implementation.
 
 ### Base Class
 
 ```python
-# automata/automata.py
+# automata/impl.py
 from abc import ABC, abstractmethod
 from automata.tree import Node
 from typing import Self
@@ -819,7 +823,7 @@ class Automata(ABC):
 Finally, finally, the position automata implementation (finally!).
 
 ```python
-# automata/automata.py
+# automata/impl.py
 
 class PositionAutomata(Automata):
     def __init__(self, node: Node) -> None:
@@ -863,7 +867,7 @@ $$
 Now, we match
 
 ```python
-# automata/automata.py
+# automata/impl.py
 from automata.parse import Parser
 
 def automata_match(pattern: str, string: str, engine: type[Automata]) -> bool:
@@ -894,28 +898,10 @@ The test uses `pytest`'s [parameterization][pyte-param] functionality,
 import pytest
 import random
 import re
-from automata.automata import Automata, PositionAutomata, automata_match
+from automata.impl import Automata, PositionAutomata, automata_match
 from automata.parser import Parser
 from automata.tree import Alt, Concat, Node, Star, Symbol
 from collections.abc import Iterator
-
-def make_match(node: Node, loops: int = 2) -> str:
-    match node:
-        case Symbol(sym, _):
-            return sym
-        case Star(node):
-            iters = random.randrange(0, loops)
-            return "".join(make_match(node, loops) for _ in range(iters))
-        case Concat(left, right):
-            return f"{make_match(left, loops)}{make_match(right, loops)}"
-        case Alt(left, right):
-            if random.randrange(2) == 0:
-                return make_match(left, loops)
-            return make_match(right, loops)
-
-
-# We'll fill this out soon enough
-ENGINES = [PositionAutomata]
 
 # try adding your own! Remember to only use our legal syntax
 PATTERNS = {
@@ -927,10 +913,29 @@ PATTERNS = {
   ...
 }
 
+# We'll fill this out soon enough
+ENGINES = [PositionAutomata]
+
+
+def make_match(node: Node, loops: int = 2) -> str:
+    match node:
+        case Symbol(sym, _):
+            return sym
+        case Star(node):
+            iters = random.randrange(loops)
+            return "".join(make_match(node, loops) for _ in range(iters))
+        case Concat(left, right):
+            return f"{make_match(left, loops)}{make_match(right, loops)}"
+        case Alt(left, right):
+            if random.randint(1, 2) == 1:
+                return make_match(left, loops)
+            return make_match(right, loops)
+
 
 def generate_matches(amount: int) -> Iterator[tuple[str, str, type[Automata]]]:
     for pattern in PATTERNS:
         node = Parser(pattern).parse()
+        # note the use of set comprehension to remove duplicate matches
         for match in {make_match(node, 5) for _ in range(amount)}:
             for engine in ENGINES:
                 yield pattern, match, engine
@@ -938,12 +943,11 @@ def generate_matches(amount: int) -> Iterator[tuple[str, str, type[Automata]]]:
 
 @pytest.mark.parametrize("pattern, match, engine", generate_matches(10))
 def test_generated_matches(pattern: str, match: str, engine: type[Automata]):
-    # Always check conformance to Python's stdlib regex matching
     assert re.match(pattern, match) is not None
     assert automata_match(pattern, match, engine=engine)
 ```
 
-The idea is that we take a regex pattern, parse it into our AST and then randomly generate as many matching strings as we want for this regex. Then we just list all the patterns we want to test and finally run against the automata and the re.match simultaneously.
+We list all the patterns we want to check. Each pattern is parsed into the AST, and we randomly generate matching strings for the pattern using `make_match`. Finally, all the patterns and matching strings are checked against each automata and re.match simultaneously.
 
 ## Done
 
@@ -951,7 +955,9 @@ Ah that's really everything... for now, there's always more stuff 😂
 
 I find both joy and frustration in the work of a coder almost never being finished, this being no exception. I'm not going to list everything we could change, or improve or anything else; no, let's stay focused. 
 
-We're all about automata atm, and next post we'll be returning to formal definition exploration as we look at understanding Follow Automata (the automata I started looking at which sent me down this rabbit hole). Until then!
+We're all about automata atm, and next post we'll be returning to formal definition exploration as we look at understanding Follow Automata (the automata I started looking at which sent me down this rabbit hole). I'll also talk about why coders should care to look at different automata constructions in the first place.
+
+Until then!
 
 ## Postscript: On Implementing Formalisms
 
