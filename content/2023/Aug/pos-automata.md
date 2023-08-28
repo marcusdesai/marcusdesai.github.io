@@ -12,6 +12,8 @@ A quick note before we begin: I will link to relevant wikipedia pages, but in my
 
 **Audience Assumptions:** experience with regexes and basic knowledge of finite state machines. Code examples will be in no-frills python.
 
+[Greek letters](https://en.wikipedia.org/wiki/Greek_letters_used_in_mathematics,_science,_and_engineering)
+
 <noscript>
     <h5 class="mb0">Secret No-JS Notice</h5>
     Hello JS turn-offs 👋 This page uses JS for one purpose only, which is to enable rendering latex using mathjax. The readability is significantly impacted without this, but not critically IMO.<br><br>
@@ -106,7 +108,7 @@ $$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta
 
 There's a lot more going on here, but we're just going to break it down element by element. To start with, \\(\Sigma\\) means exactly the same thing it did before, it's the set of symbols the automata recognises, and the start state is just whichever state corresponds to an index \\(0\\) (which will make more sense in a bit).
 
-### \\(\textsf{Pos}\_{0}(\alpha)\\)
+### Set of States \\(\textsf{Pos}\_{0}(\alpha)\\)
 
 \\(\textsf{Pos}\_{0}(\alpha)\\) is a set, and whats interesting is how we construct it. \\(\alpha\\) (alpha) is an element in the set of regular expressions... so \\(\alpha\\) is just a regex. Some examples:
 
@@ -134,7 +136,7 @@ Finally we have:
 
 $$\textsf{Pos}\_{0}(\alpha) = \\{0, 1, 2, 3, 4\\}$$
 
-### \\(\textsf{Last}\_{0}(\alpha)\\)
+### Final States \\(\textsf{Last}\_{0}(\alpha)\\)
 
 Let's begin by talking about just \\(\textsf{Last}(\alpha)\\). Constructing this set is somewhat more involved, we'll have to cover several more definitions. Intuitively \\(\textsf{Last}(\alpha)\\) contains all the indexes of the symbols in \\(\overline{\alpha}\\) that can occur last in words matched by the regex. So when \\(\alpha = \\) `ab`, the position index for `b` would be in \\(\textsf{Last}(\alpha)\\).
 
@@ -250,7 +252,7 @@ $$\textsf{Last}_{0}(\alpha) = \\{1, 4\\}$$
 
 <span style="font-size: 3rem;">😵</span>
 
-### \\(\delta_{POS}\\)
+### Transition \\(\delta_{POS}\\)
 
 Last one, and it's a biggie: the transition function \\(\delta_{POS}\\). Of course, the definition:
 
@@ -334,13 +336,12 @@ Let \\(\alpha = a(ba{\*}b)\*\\), and so we have \\(\overline{\alpha} = a_{1}(b_{
 
 The position automaton for \\(\alpha\\) is depicted as:
 
-![Position automata diagram for alpha]({static}/images/2023/Aug/pos-automata/sd-pos-ex.jpeg "Alpha Pos Automataon State Diagram")
+![Position automata diagram for alpha]({static}/images/2023/Aug/pos-automata/sd-pos-ex.jpeg "Alpha Pos Automaton State Diagram")
 
 <details>
-    <summary>Example \(a| b{*}a\)</summary>
-<p>This may appear ambiguous but the usual way of defining alternation tell us how to read this, and in code we would equivalently write <code>(a|b*)a</code></p>
+    <summary>Example \((a| b{*})a\)</summary>
 
-<p>Let \(\alpha = a | b{*}a\), so \(\overline{\alpha} = a_{1} | b_{2}{*}a_{3}\).</p>
+<p>Let \(\alpha = (a|b{*})a\), so \(\overline{\alpha} = (a_{1} | b_{2}{*})a_{3}\).</p>
 
 <ul>
 <li>\(\textsf{Pos}_{0}(\alpha) = \{0, 1, 2, 3\}\)</li>
