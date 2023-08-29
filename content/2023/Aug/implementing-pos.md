@@ -1,9 +1,10 @@
 Title: Automata Part 2: Implementing Position Automata
-Date: 2023-08-27
+Date: 2023-08-29
 Slug: implementing-pos-automata
 Category: code
 Tags: regex, automata, python, position automata, bnf, recursion
 Mathjax: true
+Status: published
 
 This is the second post in my automata series. You can find the companion code for this post [here][impl].
 
@@ -38,6 +39,7 @@ Surmising these parts we have,
 - \\(\overline{\alpha}\\) is \\(\alpha\\) with symbols _marked_, like \\(a_{1}{*}b_{2}\\) or \\(a_{1}|b_{2}a_{3}\\).
 - \\(\textsf{Pos}\_{0}(\alpha)\\) is the set of states for \\(\mathcal{A}\_{POS}(\alpha)\\), made up of the indexes of marked symbols in \\(\overline{\alpha}\\) unioned with \\(\\{0\\}\\).
 - \\(\Sigma\\) is the set of symbols or alphabet, \\(\sigma\in\Sigma\\) is just one symbol.
+- \\(\sigma_{i}\\) is a _marked_ symbol.
 - \\(\delta\_{POS}\\) is the transition function for \\(\mathcal{A}\_{POS}(\alpha)\\).
 - \\(0\\) is the initial state for \\(\delta\_{POS}\\).
 - \\(\textsf{Last}_{0}(\alpha)\\) is the set of final states (again indexes from \\(\overline{\alpha}\\)), which may also contain \\(0\\) if \\(\mathcal{A}\_{POS}(\alpha)\\) accepts the empty word or string, \\(\varepsilon\\).
@@ -852,7 +854,7 @@ class PositionAutomata(Automata):
         return {j for j in follow_i if self.pos[j] == symbol}
 ```
 
-`from_node`, `initial` and `final` should all look reasonable. You may recognise `transition` as it is almost verbatim translated from the formal definition!
+`from_node`, `initial` and `final` should all look reasonable. You may recognise `transition` as it is almost verbatim translated from the [formal definition][part-1-tf]!
 
 $$
 \begin{align}
@@ -976,6 +978,7 @@ How can we bridge this gap? I consider this to be a more valuable question to as
 [ref-1-link]: https://www.dcc.fc.up.pt/~nam/publica/dlt2017.pdf
 
 [part-1]: {filename}/2023/Aug/pos-automata.md
+[part-1-tf]: {filename}/2023/Aug/pos-automata.md#transition-delta_pos
 
 [impl]: https://github.com/marcusdesai/automata/tree/2-implementing-pos-automata
 [impl-tree]: https://github.com/marcusdesai/automata/blob/2-implementing-pos-automata/automata/tree.py

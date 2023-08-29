@@ -382,7 +382,7 @@ $$\delta_{POS}(0, a) = \{1, 3\}$$
 
 ## Where To Now?
 
-We made it! Although I don't think all the details we've been through necessarily lend themselves to a natural and intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Since using these definitions will firm up our understanding of these ideas, and since we currently we have no proper implementation, our path forward is easy to choose. In the next post of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
+We made it! Although I don't think all the details we've been through necessarily lend themselves to a natural and intuitive mental model of PA, what they do provide is a clear mechanics of how we can construct these automata. Since using these definitions will firm up our understanding of these ideas, and since we currently we have no proper implementation, our path forward is easy to choose. In the [next post][part-2] of this series we'll work on a more serious Python implementation of the construction of PA from regexes using the definitions we've presented here.
 
 Something of interest, the notions of \\(\textsf{First}\\), \\(\textsf{Last}\\) and \\(\textsf{Follow}\\) that we have encountered here pop up in a lot of places, indeed this whole idea of labelling positions and tracking relationships between them is very useful. For example, the Rust project [uses these sets][rust-sets] to help handle ambiguity in declarative macros (AKA macro-by-example).
 
@@ -408,3 +408,5 @@ Thanks to my friend [Declan Kolakowski][dec-gh] for proof reading the draft of t
 [crate-ra]: https://crates.io/crates/regex-automata
 [set-nota]: https://en.wikipedia.org/wiki/Set-builder_notation
 [dec-gh]: https://github.com/dpwdec
+
+[part-2]: {filename}/2023/Aug/implementing-pos.md
