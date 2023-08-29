@@ -1,0 +1,37 @@
+%! Author = marcusdesai
+%! Date = 28/08/2023
+
+% Preamble
+\documentclass[border=5pt]{standalone}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+% Document
+\begin{document}
+
+    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto]
+        \tikzset{initial text={},initial where=left}
+        % Define attributes for the initial node
+        \tikzstyle{every initial by arrow}=[initial distance=1em,inner sep=0pt]
+
+        \node[state,initial] (q_0) {$0$};
+        \node[state,accepting,draw,align=center] (q_1) [right=of q_0] {1,2,\\3,6};
+        \node[state,accepting] (q_2) [right=of q_1] {$4,5$};
+        \path[->]
+        (q_0) edge node {a} (q_1)
+        (q_0) edge [bend right] node[above] {b} (q_1)
+
+        (q_1) edge [out=75,in=105,looseness=3] node[above] {a} (q_1)
+        (q_1) edge [out=60,in=120,looseness=4.5] node[above] {b} (q_1)
+        (q_1) edge [bend left] node[above] {b} (q_2)
+
+        (q_2) edge [out=75,in=105,looseness=3.5] node[above] {a} (q_2)
+        (q_2) edge [out=60,in=120,looseness=5.25] node[above] {b} (q_2)
+        (q_2) edge node[above] {a} (q_1)
+        (q_2) edge [bend left] node[above] {b} (q_1);
+    \end{tikzpicture}
+
+\end{document}
