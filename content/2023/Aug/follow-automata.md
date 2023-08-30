@@ -1,5 +1,5 @@
 Title: Automata Part 3: Follow Automata
-Date: 2023-08-26
+Date: 2023-08-31
 Slug: follow-automata
 Category: code
 Tags: regex, automata, follow automata, theory
@@ -30,7 +30,7 @@ In that paper, figure 1. presents the state diagrams of various automata constru
 
 The Follow automata immediately struck me as "better", and there's good reason for this. The time complexity of matching a string with a [Non-Deterministic Finite Automata][wiki-nfa] (NFA) depends not just on the length of the string, but also the number of states in the NFA!
 
-This is easy to see when we look at the implementation of [`accepts`][impl-acpt] from our `Automata` base class:
+This is easy to see when we look at the implementation of [`accepts`][impl-acpt] (adapted for this example) from our `Automata` base class:
 
 ```python
 # overall loop size: word length * num states
@@ -40,9 +40,12 @@ def accepts(self, word: str) -> bool:
     for symbol in word:
         if len(states) == 0:
             return False
+        new_states = set()
         # loop size: potentially total number of states in the Automata
         # though in practice it's usually less
-        states = {t for s in states for t in self.transition(s, symbol)}
+        for s in states:
+            new_states |= self.transition(s, symbol)
+        states = new_states
     return len(states.intersection(self.final)) > 0
 ```
 
@@ -346,11 +349,9 @@ The classic go to resource for learning about implementing regex with automata i
 
 This is where I myself first learnt about the practicalities of implementing regex with automata and it remains a good read and useful resource, so why have I not mentioned it before now, or covered Thompson's construction?
 
-Well one big reason is that readers are already well served by the article (if they can read C), but my reason is that we can do better than only use NFAs with [\\(\varepsilon\\)-transitions][wiki-ep-move] (aka \\(\varepsilon\\)-moves). Constructions like Position and Follow came about partially in response to the desire to construct NFAs without \\(\varepsilon\\)-transitions, and as they can be constructed directly they have an inherent advantage over using NFAs which are built via \\(\varepsilon\\)-elimination.
+Well one big reason is that readers are already well served by the article, but my reason is that we can do better than only use NFAs with [\\(\varepsilon\\)-transitions][wiki-ep-move] (aka \\(\varepsilon\\)-moves). Constructions like Position and Follow came about partially in response to the desire to construct NFAs without \\(\varepsilon\\)-transitions, and as they can be constructed directly they have an inherent advantage over using NFAs which are built via \\(\varepsilon\\)-elimination.
 
-Using Thompson's construction (or other \\(\varepsilon\\)-NFAs) without considering more recent developments (remember that Follow is from 2003) means potentially leaving significant benefits on the table. 
-
-So, I'm writing this series while ignoring \\(\varepsilon\\)-transitions because I hope to make the non-epsilon way more accessible.
+Using Thompson's construction (or other \\(\varepsilon\\)-NFAs) without considering more recent developments (remember that Follow is from 2003) means potentially leaving significant benefits on the table. In writing this series, I hope to make the way of the non-epsilon more accessible.
 
 ## References
 
