@@ -957,7 +957,7 @@ Ah that's really everything... for now, there's always more stuff 😂
 
 I find both joy and frustration in the work of a coder almost never being finished, this being no exception. I'm not going to list everything we could change, or improve or anything else; no, let's stay focused. 
 
-We're all about automata atm, and next post we'll be returning to formal definition exploration as we look at understanding Follow Automata (the automata I started looking at which sent me down this rabbit hole). I'll also talk about why coders should care to look at different automata constructions in the first place.
+We're all about automata atm, and [next post][part-3] we'll be returning to formal definition exploration as we look at understanding Follow Automata (the automata I started looking at which sent me down this rabbit hole). I'll also talk about why coders should care to look at different automata constructions in the first place. Spoiler: because NFAs with less states can have better performance characteristics.
 
 Until then!
 
@@ -979,6 +979,7 @@ How can we bridge this gap? I consider this to be a more valuable question to as
 
 [part-1]: {filename}/2023/Aug/pos-automata.md
 [part-1-tf]: {filename}/2023/Aug/pos-automata.md#transition-delta_pos
+[part-3]: {filename}/2023/Aug/follow-automata.md
 
 [impl]: https://github.com/marcusdesai/automata/tree/2-implementing-pos-automata
 [impl-tree]: https://github.com/marcusdesai/automata/blob/2-implementing-pos-automata/automata/tree.py
