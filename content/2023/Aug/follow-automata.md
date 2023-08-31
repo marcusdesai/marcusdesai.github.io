@@ -4,8 +4,9 @@ Slug: follow-automata
 Category: code
 Tags: regex, automata, follow automata, theory
 Mathjax: true
+Status: published
 
-This is the third post in my automata series. Here's parts [one][part-1] and [two][part-2]. You can find the companion code for this post [here][impl].
+This is the third post in my automata series, thankfully much shorter than the last one 😆 Here's parts [one][part-1] and [two][part-2]. You can find the companion code for this post [here][impl].
 
 **Audience Assumptions:** Has read parts [one][part-1] and [two][part-2] of this series, or has knowledge of follow set like constructions. Some Python reading skills.
 
@@ -301,7 +302,7 @@ ENGINES = [PositionAutomata, FollowAutomata]
 
 ### State Diagrams
 
-I want to quickly cover reading state diagrams for Follow automata, and I've left it till after the implementation as we can use it to help us in this. We'll reuse the example from the start of this post, \\(\alpha = (a|b)(a{\*}|ba{\*}|b\*)\* \\).
+I want to quickly cover reading the style of state diagrams for Follow automata shown above. The implementation can help us with this, which is why I've left it till now. We'll reuse the example from the start of this post, \\(\alpha = (a|b)(a{\*}|ba{\*}|b\*)\* \\).
 
 ```pycon
 >>> from automata.impl import FollowAutomata
@@ -339,7 +340,9 @@ which should give you all the info you need to figure out the state diagram,
 
 ## Done
 
-That's it, we've covered everything I wanted to cover here. There's just one more post left in this series that I really want to write: explaining the Mark-Before automaton. This will bring us finally to [Deterministic Finite Automata][wiki-dfa] (DFA) after all this time spent with NFAs.
+That's it, we've covered everything I wanted to cover here. There's just one more post left in this series that I really want to write: explaining the Mark Before automaton. This will bring us finally to [Deterministic Finite Automata][wiki-dfa] (DFA) after all this time spent with NFAs.
+
+Mark Before constructions can give us the huge benefit of DFAs, \\(\textsf{O}(n)\\) time complexity to match a string, **without** the usual significant drawback, an explosion of up to \\(2^{n}\\) states compared to an equivalent NFA.
 
 See you in the next one!
 
@@ -351,7 +354,7 @@ This is where I myself first learnt about the practicalities of implementing reg
 
 Well one big reason is that readers are already well served by the article, but my reason is that we can do better than only use NFAs with [\\(\varepsilon\\)-transitions][wiki-ep-move] (aka \\(\varepsilon\\)-moves). Constructions like Position and Follow came about partially in response to the desire to construct NFAs without \\(\varepsilon\\)-transitions, and as they can be constructed directly they have an inherent advantage over using NFAs which are built via \\(\varepsilon\\)-elimination.
 
-Using Thompson's construction (or other \\(\varepsilon\\)-NFAs) without considering more recent developments (remember that Follow is from 2003) means potentially leaving significant benefits on the table. In writing this series, I hope to make the way of the non-epsilon more accessible.
+Using Thompson's construction (or other \\(\varepsilon\\)-NFAs) without considering more recent developments (remember that Follow is from 2003) means potentially leaving significant benefits on the table. Hopefully this series has made the way of the non-epsilon more accessible.
 
 ## References
 
