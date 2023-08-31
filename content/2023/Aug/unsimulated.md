@@ -1,4 +1,4 @@
-Title: Freedom is in Being Who You Are
+Title: Freedom Is in Being Who You Are
 Date: 2023-08-07
 Slug: freedom-in-being
 Category: philosophy
