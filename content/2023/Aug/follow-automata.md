@@ -70,7 +70,7 @@ $$A = \langle Q, \Sigma, \delta, I, F \rangle$$
 - \\(I\\) is the initial state.
 - \\(F\\) is the set of final states.
 
-We will be using definitions from part [one][part-1] also, not surprising since \\(\mathcal{A}\_{\text{F}}\\) is an extension of \\(\mathcal{A}\_{POS}\\). I'll reintroduce these as they are used, and note that I'll be using the non-constructive definitions from Broda et al. verbatim. Upfront, recall that,
+We will be using definitions from part [one][part-1] also, not surprising since \\(\mathcal{A}\_{\text{F}}\\) is an extension of \\(\mathcal{A}\_{\text{POS}}\\). I'll reintroduce these as they are used, and note that I'll be using the non-constructive definitions from Broda et al. verbatim. Upfront, recall that,
 
 - \\(\Sigma\\) is the set of symbols, \\(\sigma\in\Sigma\\) is a single symbol, and \\(\sigma_{i}\\) is a _marked_ symbol.
 - \\(\alpha\\) is a regex, like `ab|a*`.
@@ -96,7 +96,7 @@ $$
 
 We haven't encountered \\(\varepsilon(0)\\) before, though it's similar in form to nullable in Broda et al. Whereas \\(\varepsilon(\alpha)\\) (nullable) applies to regexes, \\(\varepsilon(q)\\) (finality) acts on states. Intuitively, it indicates whether a state is final or not.
 
-I want us all to be careful here. When defining \\(\mathcal{A}\_{\text{F}}\\) we will see \\(\varepsilon(0)\\), \\(\varepsilon(1)\\), and so on. Now, \\(0\\) and \\(1\\) are **not** states of \\(\mathcal{A}\_{\text{F}}\\), but of \\(\mathcal{A}\_{POS}\\). So we need to be careful about the **two** sets of states at play in these definitions. To be clear, these two sets are \\(\textsf{Pos}\_{0}(\alpha)\\) from \\(\mathcal{A}\_{POS}\\), and \\(\textsf{F}(\alpha)\\) from \\(\mathcal{A}\_{\text{F}}\\).
+I want us all to be careful here. When defining \\(\mathcal{A}\_{\text{F}}\\) we will see \\(\varepsilon(0)\\), \\(\varepsilon(1)\\), and so on. Now, \\(0\\) and \\(1\\) are **not** states of \\(\mathcal{A}\_{\text{F}}\\), but of \\(\mathcal{A}\_{\text{POS}}\\). So we need to be careful about the **two** sets of states at play in these definitions. To be clear, these two sets are \\(\textsf{Pos}\_{0}(\alpha)\\) from \\(\mathcal{A}\_{\text{POS}}\\), and \\(\textsf{F}(\alpha)\\) from \\(\mathcal{A}\_{\text{F}}\\).
 
 For \\(q\in Q\\) (the set of states), and \\(F\\) (set of final states), the _finality_ function is defined as,
 
@@ -109,7 +109,7 @@ $$
 
 This is simple enough, let's quickly look at an example anyway. Let \\(\alpha = (a{\*}|b)a\\), so \\(\overline{\alpha} = (a_{1}{*}|b_{2})a_{3}\\). \\(F\\) will be \\(\textsf{Last}\_{0}(\alpha)\\), \\(\textsf{Last}\_{0}(\alpha) = \\{3\\}\\), hence \\(\varepsilon(0) = \emptyset\\).
 
-The key insight of the Follow construction is to label states with their follow sets, rather than position indexes (as in \\(\mathcal{A}\_{POS}\\)). The total number of states may be reduced as the follow sets of two states may be identical. But we still need to distinguish final from non-final ones, which is done with the second member of the pair.
+The key insight of the Follow construction is to label states with their follow sets, rather than position indexes (as in \\(\mathcal{A}\_{\text{POS}}\\)). The total number of states may be reduced as the follow sets of two states may be identical. But we still need to distinguish final from non-final ones, which is done with the second member of the pair.
 
 ### Set of States \\(\textsf{F}(\alpha)\\)
 
@@ -129,7 +129,7 @@ $$
 \textsf{F}(\alpha) = \\{(\textsf{Follow}(\alpha, i), \varepsilon(i)) \mid i \in \textsf{Pos}\_{0}(\alpha)\\}
 $$
 
-We've seen all of the parts of this [before][part-1], but I want to spend a bit of time drawing out an important consequence of this definition. For a set \\(A\\), the number of elements in the set (its [cardinality][wiki-card]) is denoted \\(|A|\\). Now \\(\textsf{F}(\alpha)\\) has at most one member for each element in \\(\textsf{Pos}\_{0}(\alpha)\\), therefore \\(|\textsf{F}(\alpha)| \leq |\textsf{Pos}\_{0}(\alpha)|\\). So using this construction, \\(\mathcal{A}\_{\text{F}}\\) is **guaranteed** to never exceed the number of states in \\(\mathcal{A}\_{POS}\\).
+We've seen all of the parts of this [before][part-1], but I want to spend a bit of time drawing out an important consequence of this definition. For a set \\(A\\), the number of elements in the set (its [cardinality][wiki-card]) is denoted \\(|A|\\). Now \\(\textsf{F}(\alpha)\\) has at most one member for each element in \\(\textsf{Pos}\_{0}(\alpha)\\), therefore \\(|\textsf{F}(\alpha)| \leq |\textsf{Pos}\_{0}(\alpha)|\\). So using this construction, \\(\mathcal{A}\_{\text{F}}\\) is **guaranteed** to never exceed the number of states in \\(\mathcal{A}\_{\text{POS}}\\).
 
 Continuing our example, \\(\overline{\alpha} = (a_{1}{*}|b_{2})a_{3}\\),
 
@@ -200,7 +200,7 @@ $$
 
 ## Implementation
 
-We've already done the hard work of setting up the [AST][part-2-ast], [parser][part-2-parser], and [automata][part-2-auto] structure, which makes this implementation both significantly easier and quicker than the one for \\(\mathcal{A}\_{POS}\\). This is a good example of the compounding effect of prior work shortening the path for future work.
+We've already done the hard work of setting up the [AST][part-2-ast], [parser][part-2-parser], and [automata][part-2-auto] structure, which makes this implementation both significantly easier and quicker than the one for \\(\mathcal{A}\_{\text{POS}}\\). This is a good example of the compounding effect of prior work shortening the path for future work.
 
 ### Generic States
 
@@ -247,7 +247,7 @@ class Automata(ABC, Generic[T]):
 
 ### \\(\mathcal{A}\_{\text{F}}\\)
 
-Here is the [implementation][impl-follow], short and sweet. There's not much to note, other than the extra processing which we do in `__init__` and the `transition` method. This extra processing could easily be optimised, or removed entirely, so much so that the construction of \\(\mathcal{A}\_{\text{F}}\\) is not much more onerous than \\(\mathcal{A}\_{POS}\\). 
+Here is the [implementation][impl-follow], short and sweet. There's not much to note, other than the extra processing which we do in `__init__` and the `transition` method. This extra processing could easily be optimised, or removed entirely, so much so that the construction of \\(\mathcal{A}\_{\text{F}}\\) is not much more onerous than \\(\mathcal{A}\_{\text{POS}}\\). 
 
 ```python
 # automata/impl.py

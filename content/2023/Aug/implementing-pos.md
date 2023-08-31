@@ -29,22 +29,22 @@ Also, I want to continue looking at formal definitions throughout to establish t
 
 ## Task
 
-In the previous post we looked in detail at Position Automata (\\(\mathcal{A}\_{POS}\\)).
+In the previous post we looked in detail at Position Automata (\\(\mathcal{A}\_{\text{POS}}\\)).
 
-$$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{POS}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
+$$\mathcal{A}\_{\text{POS}}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{\text{POS}}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
 
 Surmising these parts we have, 
 
 - \\(\alpha\\) is a regex, like \\(a{*}b\\) or \\(a|ba\\).
 - \\(\overline{\alpha}\\) is \\(\alpha\\) with symbols _marked_, like \\(a_{1}{*}b_{2}\\) or \\(a_{1}|b_{2}a_{3}\\).
-- \\(\textsf{Pos}\_{0}(\alpha)\\) is the set of states for \\(\mathcal{A}\_{POS}(\alpha)\\), made up of the indexes of marked symbols in \\(\overline{\alpha}\\) unioned with \\(\\{0\\}\\).
+- \\(\textsf{Pos}\_{0}(\alpha)\\) is the set of states for \\(\mathcal{A}\_{\text{POS}}(\alpha)\\), made up of the indexes of marked symbols in \\(\overline{\alpha}\\) unioned with \\(\\{0\\}\\).
 - \\(\Sigma\\) is the set of symbols or alphabet, \\(\sigma\in\Sigma\\) is just one symbol.
 - \\(\sigma_{i}\\) is a _marked_ symbol.
-- \\(\delta\_{POS}\\) is the transition function for \\(\mathcal{A}\_{POS}(\alpha)\\).
-- \\(0\\) is the initial state for \\(\delta\_{POS}\\).
-- \\(\textsf{Last}_{0}(\alpha)\\) is the set of final states (again indexes from \\(\overline{\alpha}\\)), which may also contain \\(0\\) if \\(\mathcal{A}\_{POS}(\alpha)\\) accepts the empty word or string, \\(\varepsilon\\).
+- \\(\delta\_{\text{POS}}\\) is the transition function for \\(\mathcal{A}\_{\text{POS}}(\alpha)\\).
+- \\(0\\) is the initial state for \\(\delta\_{\text{POS}}\\).
+- \\(\textsf{Last}_{0}(\alpha)\\) is the set of final states (again indexes from \\(\overline{\alpha}\\)), which may also contain \\(0\\) if \\(\mathcal{A}\_{\text{POS}}(\alpha)\\) accepts the empty word or string, \\(\varepsilon\\).
 
-Our task now is provide an implementation of \\(\mathcal{A}\_{POS}\\)! Okay, but what kind of engineering constraints do we have for this? And what does finished look like?
+Our task now is provide an implementation of \\(\mathcal{A}\_{\text{POS}}\\)! Okay, but what kind of engineering constraints do we have for this? And what does finished look like?
 
 Two constraints, code should be clear, and should trace to the definitions we cover in a straightforward way. I'm not going to place performance considerations over code clarity, the code is not production ready if what we want is to use this implementation in anger. All code will be Python 3.11.
 
@@ -60,7 +60,7 @@ which includes an explicit engine parameter as we'll eventually test other autom
 
 ### Design
 
-Building \\(\mathcal{A}\_{POS}(\alpha)\\) means extracting the relevant info from a regex pattern. My intuition says that ad-hoc processing would become unwieldy quickly, and be very resistant to future expansions. We want a more structured approach, recursion seems the obvious answer. Why? Because regexes are recursive and highly composable by nature, we can take advantage of this.
+Building \\(\mathcal{A}\_{\text{POS}}(\alpha)\\) means extracting the relevant info from a regex pattern. My intuition says that ad-hoc processing would become unwieldy quickly, and be very resistant to future expansions. We want a more structured approach, recursion seems the obvious answer. Why? Because regexes are recursive and highly composable by nature, we can take advantage of this.
 
 This reason should hopefully become more convincing as we go, but to give some immediate motivation let's consider how regexes themselves are formally defined. Often this is done recursively in the following way,
 
@@ -75,7 +75,7 @@ When \\(\alpha\\) and \\(\beta\\) are regular expressions,
 
 We're not describing semantics here (how these elements behave), we're just laying out the structure of regexes. Importantly, we can go about attaching semantics to each of these elements separately from the others. Knowing how to explain more complex behaviour of regexes (such as the makeup of \\(\textsf{Last}_{0}(\alpha)\\)) is just a matter of correctly composing the behaviour of its elements.
 
-Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then, to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{POS}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in 'On the mother of all automata: the position automaton' by Broda et al. \[[1](#ref-1)] throughout.
+Recursive structure derived from code written as text? Why now, that's an [Abstract Syntax Tree][wiki-ast] (AST) if ever I've heard. We'll definitely need one of these. Immediately another problem, how do we go from the text of the pattern to this tree? We'll need a parser as well then, to handle this transformation. Finally of course, we need to actually provide the \\(\mathcal{A}\_{\text{POS}}(\alpha)\\) implementation. As in the [first post][part-1], we'll be referring to definitions in 'On the mother of all automata: the position automaton' by Broda et al. \[[1](#ref-1)] throughout.
 
 Right, let's get started then!
 
@@ -137,7 +137,7 @@ Concat(Symbol("a", 1), Concat(Symbol("b", 2), Symbol("c", 3)))
 
 </details>
 
-Any concrete instance of type `Node` is a regex which we can construct \\(\mathcal{A}\_{POS}\\) from. The primary duty of a `Node` class is to provide the information we need to perform this construction. I am going to refer to \\(\textsf{node}\\) as an instance of `Node`, and I will use \\(\textsf{node}\\) and \\(\alpha\\) interchangeably as they are equivalent in meaning.
+Any concrete instance of type `Node` is a regex which we can construct \\(\mathcal{A}\_{\text{POS}}\\) from. The primary duty of a `Node` class is to provide the information we need to perform this construction. I am going to refer to \\(\textsf{node}\\) as an instance of `Node`, and I will use \\(\textsf{node}\\) and \\(\alpha\\) interchangeably as they are equivalent in meaning.
 
 Specifically, a \\(\textsf{node}\\) should provide:
 
@@ -154,7 +154,7 @@ It's sensible to start with the definitions in Broda et al., we may be able to d
 
 $$\textsf{First}(\alpha) = \\{i \mid \sigma_{i}w \in \mathcal{L}(\overline{\alpha})\\}$$
 
-which relies on the definition of \\(\mathcal{L}(\overline{\alpha})\\). Here's where disappointment sets in, \\(\mathcal{L}(\overline{\alpha})\\) is the set of (symbol indexed) words accepted by \\(\alpha\\). But this acceptance is exactly what we're trying to calculate! We're only trying to implement \\(\mathcal{A}\_{POS}\\) to figure out whether any string we have is accepted or not by the regex 🫤
+which relies on the definition of \\(\mathcal{L}(\overline{\alpha})\\). Here's where disappointment sets in, \\(\mathcal{L}(\overline{\alpha})\\) is the set of (symbol indexed) words accepted by \\(\alpha\\). But this acceptance is exactly what we're trying to calculate! We're only trying to implement \\(\mathcal{A}\_{\text{POS}}\\) to figure out whether any string we have is accepted or not by the regex 🫤
 
 We could construct \\(\mathcal{L}(\overline{\alpha})\\), implementing its [recursive definition][wiki-reg-lang]. But this would be equivalent to making a regex engine where all possible words accepted by the regex are constructed before definitions relying on \\(\mathcal{L}(\overline{\alpha})\\) are used. Clearly this would be infinite (due to `*`), and even if we accept this as okay for small regexes (ignoring the redundancy of calculating everything twice), anything complicated becomes immediately untenable.
 
@@ -390,7 +390,7 @@ $$
 
 ### \\(\textsf{Last}_{0}\\)
 
-Whether the initial state \\(0\\) (it's always \\(0\\) for any \\(\mathcal{A}\_{POS}(\alpha)\\)) is included in the set of final states depends on whether a regex is nullable (accepts the empty word \\(\varepsilon\\)) or not. \\(\textsf{Last}_{0}\\) is constructed to hold this information.
+Whether the initial state \\(0\\) (it's always \\(0\\) for any \\(\mathcal{A}\_{\text{POS}}(\alpha)\\)) is included in the set of final states depends on whether a regex is nullable (accepts the empty word \\(\varepsilon\\)) or not. \\(\textsf{Last}_{0}\\) is constructed to hold this information.
 
 Because we know that every concrete \\(\textsf{node}\\) defines `nullable` and \\(\textsf{Last}\\), we don't have to care at all about what type a node is to work out its \\(\textsf{Last}\_{0}\\) set. In code, this means we can provide a concrete implementation of this method on the ABC `Node` itself.
 
@@ -820,7 +820,7 @@ class Automata(ABC):
         return len(states.intersection(self.final)) > 0
 ```
 
-### \\(\mathcal{A}\_{POS}\\)
+### \\(\mathcal{A}\_{\text{POS}}\\)
 
 Finally, finally, the position automata implementation (finally!).
 

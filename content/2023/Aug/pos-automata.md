@@ -104,7 +104,7 @@ class Automata:
 
 Okay, let's get stuck in to the details of PA, starting again with the formal definition:
 
-$$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{POS}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
+$$\mathcal{A}\_{\text{POS}}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{\text{POS}}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
 
 There's a lot more going on here, but we're just going to break it down element by element. To start with, \\(\Sigma\\) means exactly the same thing it did before, it's the set of symbols the automata recognises, and the start state is just whichever state corresponds to an index \\(0\\) (which will make more sense in a bit).
 
@@ -324,7 +324,7 @@ Because \\(\overline{\sigma_{3}} = a\\) and \\(\overline{\sigma_{4}} = b\\).
 
 ### Putting it All Together
 
-$$\mathcal{A}\_{POS}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{POS}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
+$$\mathcal{A}\_{\text{POS}}(\alpha) = \langle \textsf{Pos}\_{0}(\alpha), \Sigma, \delta\_{\text{POS}}, 0, \textsf{Last}_{0}(\alpha) \rangle$$
 
 Let \\(\alpha = a(ba{\*}b)\*\\), and so we have \\(\overline{\alpha} = a_{1}(b_{2}a_{3}{\*}b_{4})\*\\).
 
