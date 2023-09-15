@@ -342,7 +342,7 @@ which should give you all the info you need to figure out the state diagram,
 
 That's it, we've covered everything I wanted to cover here. There's just one more post left in this series that I really want to write: explaining the Mark Before automaton. This will bring us finally to [Deterministic Finite Automata][wiki-dfa] (DFA) after all this time spent with NFAs.
 
-Mark Before constructions can give us the huge benefit of DFAs, \\(\textsf{O}(n)\\) time complexity to match a string, **without** the usual significant drawback, an explosion of up to \\(2^{n}\\) states compared to an equivalent NFA.
+Mark Before constructions can give us the huge benefit of DFAs, \\(\textsf{O}(n)\\) time complexity to match a string, while reducing the impact of exploding numbers of states when constructing DFAs (up to \\(2^{N}\\) for a DFA constructed from an NFA with \\(N\\) states).
 
 See you in the next one!
 
